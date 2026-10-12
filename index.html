@@ -1,0 +1,927 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Marte Gestão de Equipe</title></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--or:#F26A1B;--or2:#C94F0A;--or1:#FF8A3D;--or3:#FFF1E8;--gr:#2E3236;--gr2:#3C4146;--bg:#F4F2F0;--card:#FFFFFF;--tx:#24272A;--tx2:#5E6368;--tx3:#8A8F94;--ln:#E7E3DF;
+--ok:#1E9E5A;--ok2:#157544;--okb:#E4F6EB;--er:#D93B30;--er2:#A82A21;--erb:#FCE9E7;--wa:#B07800;--wa2:#E8A317;--wab:#FFF4D4;--ex:#6B4FBB;--exb:#EFEAFB;--at:#2F6FB0;--atb:#E6F0FA;--nb:#EEECEA;
+--sh:0 1px 2px rgba(40,25,10,.06),0 10px 28px rgba(40,25,10,.08)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#16181A;--card:#212529;--tx:#ECEDEE;--tx2:#B4B9BE;--tx3:#868C92;--ln:#33383D;--or3:#3A2618;--okb:#16321F;--erb:#3B1C19;--wab:#3A2F10;--exb:#2A2340;--atb:#1A2A3A;--nb:#2B3034;--sh:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{--bg:#16181A;--card:#212529;--tx:#ECEDEE;--tx2:#B4B9BE;--tx3:#868C92;--ln:#33383D;--or3:#3A2618;--okb:#16321F;--erb:#3B1C19;--wab:#3A2F10;--exb:#2A2340;--atb:#1A2A3A;--nb:#2B3034;--sh:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.35)}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.45 Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+h1,h2,h3,h4,.ff{font-family:Poppins,Inter,sans-serif;letter-spacing:-.01em}
+h2{font-size:18px;margin:0 0 4px}h3{font-size:16px;margin:0}
+p{margin:0}
+button{font-family:inherit}
+svg.i{flex:none}
+/* login */
+#login{min-height:100vh;display:grid;place-items:center;padding:16px;background:radial-gradient(1200px 600px at 10% -10%,var(--or1),transparent 60%),linear-gradient(135deg,var(--or) 0%,var(--or2) 45%,var(--gr) 100%)}
+.lc{background:var(--card);border-radius:26px;box-shadow:0 30px 80px rgba(0,0,0,.3);padding:30px;width:100%;max-width:430px}
+.lg{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.lg b{width:46px;height:46px;border-radius:14px;background:var(--or);color:#fff;display:grid;place-items:center;font:700 20px Poppins;box-shadow:0 4px 0 var(--or2)}
+.lg h1{font-size:17px;margin:0;letter-spacing:.04em}.lg p{color:var(--tx2);font-size:12.5px}
+.ldev{margin-top:16px;padding:12px;border-radius:14px;background:var(--nb);font-size:12.5px;color:var(--tx2)}
+.lnk{background:none;border:0;color:var(--or);font-weight:600;cursor:pointer;padding:0;text-decoration:underline}
+/* app */
+#app{display:none;min-height:100vh}
+#app.on{display:grid;grid-template-columns:250px minmax(0,1fr)}
+#side{background:var(--gr);color:#fff;position:sticky;top:0;height:100vh;overflow:auto;padding:18px 12px;display:flex;flex-direction:column;gap:3px;z-index:60}
+.logo{display:flex;align-items:center;gap:10px;padding:4px 10px 18px;font:700 14px Poppins;letter-spacing:.05em}
+.logo b{background:var(--or);width:36px;height:36px;border-radius:11px;display:grid;place-items:center;box-shadow:0 3px 0 var(--or2);font-size:16px}
+.logo small{display:block;font:500 10px Inter;opacity:.65;letter-spacing:.14em}
+.mi{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:13px;color:#D5D9DD;cursor:pointer;border:0;background:none;width:100%;text-align:left;font:500 14px Inter;transition:background .15s,color .15s,transform .15s}
+.mi:hover{background:rgba(255,255,255,.08);color:#fff}
+.mi.on{background:linear-gradient(180deg,var(--or1),var(--or));color:#fff;box-shadow:0 3px 0 var(--or2)}
+.mi .bd{margin-left:auto;background:var(--er);color:#fff;border-radius:99px;font:700 11px Inter;padding:1px 7px}
+.mi.on .bd{background:#fff;color:var(--or2)}
+.sep{height:1px;background:rgba(255,255,255,.1);margin:10px 6px}
+.sidecap{font:600 10.5px Inter;letter-spacing:.14em;opacity:.5;padding:6px 12px 4px}
+#scrim{display:none}
+#hdr{background:linear-gradient(120deg,var(--or1) 0%,var(--or) 45%,var(--or2) 100%);color:#fff;padding:22px 28px 70px;position:relative;overflow:hidden}
+#hdr:after{content:"";position:absolute;right:-80px;top:-120px;width:340px;height:340px;border-radius:50%;background:rgba(255,255,255,.08)}
+.hrow{display:flex;align-items:center;gap:16px;position:relative;z-index:1}
+.av{width:66px;height:66px;border-radius:50%;background:#fff;color:var(--or);display:grid;place-items:center;font:700 22px Poppins;overflow:hidden;border:3px solid rgba(255,255,255,.9);box-shadow:0 6px 16px rgba(0,0,0,.18);flex:none}
+.av img{width:100%;height:100%;object-fit:cover}
+.av.sm{width:36px;height:36px;font-size:13px;border:2px solid rgba(242,106,27,.55);box-shadow:0 2px 6px rgba(40,25,10,.12);background:linear-gradient(135deg,var(--or1),var(--or));color:#fff}
+.av.sm img{border-radius:50%}
+.av.hd{width:104px;height:104px;font-size:36px;border:4px solid #fff;box-shadow:0 0 0 4px rgba(255,255,255,.28),0 12px 28px rgba(0,0,0,.22)}
+.avw{position:relative;flex:none;cursor:pointer}
+.avw .cam{position:absolute;right:-2px;bottom:2px;width:34px;height:34px;border-radius:50%;background:#fff;color:var(--or);display:grid;place-items:center;border:0;box-shadow:0 3px 0 rgba(0,0,0,.12),0 6px 14px rgba(0,0,0,.2);cursor:pointer;transition:transform .15s}
+.avw .cam:hover{transform:scale(1.08)}
+.hi .nc{font:600 15px Poppins;margin-top:2px;opacity:.97}
+.crop{position:relative;width:260px;height:260px;margin:16px auto 6px;border-radius:50%;overflow:hidden;background:var(--nb);touch-action:none;cursor:grab;box-shadow:0 0 0 4px var(--or3),0 0 0 6px rgba(242,106,27,.5)}
+.crop:active{cursor:grabbing}
+.crop canvas{width:100%;height:100%;display:block}
+input[type=range]{accent-color:var(--or);padding:0;border:0;box-shadow:none}
+.av.lg{width:110px;height:110px;font-size:36px;border-color:var(--or3)}
+.hi h1{margin:0;font-size:24px}.hi p{margin:2px 0 0;opacity:.95}.hi .dt{font-size:12.5px;opacity:.85}
+.hact{margin-left:auto;display:flex;gap:10px}
+.hb{width:46px;height:46px;border-radius:15px;border:0;background:rgba(255,255,255,.2);color:#fff;display:grid;place-items:center;cursor:pointer;position:relative;transition:transform .15s,background .15s}
+.hb:hover{background:rgba(255,255,255,.3);transform:translateY(-1px)}
+.hb .cnt{position:absolute;top:-6px;right:-6px;background:#fff;color:var(--er);font:700 11px Inter;border-radius:99px;min-width:21px;height:21px;padding:0 5px;display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.hb.menu{display:none}
+#main{padding:0 28px 48px;margin-top:-46px;position:relative;z-index:2;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.demo{display:flex;gap:8px;align-items:flex-start;background:var(--wab);color:var(--wa);border-radius:14px;padding:9px 14px;font-size:12.5px;margin-bottom:16px;border:1px solid rgba(232,163,23,.35)}
+.card{background:var(--card);border-radius:20px;box-shadow:var(--sh);padding:20px;border:1px solid var(--ln);transition:transform .18s,box-shadow .18s}
+.card.hov:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(40,25,10,.08),0 16px 36px rgba(40,25,10,.12)}
+.ch3{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.ch3 .ci{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--or3);color:var(--or);flex:none}
+.ch3 h3{font-size:14px;color:var(--tx2);font-family:Inter;font-weight:600}
+.big1{font:700 22px Poppins;margin:2px 0}
+.sub{color:var(--tx2);font-size:13px}
+.mut{color:var(--tx3);font-size:12.5px}
+.grid{display:grid;gap:16px}
+.g5{grid-template-columns:repeat(5,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g7{grid-template-columns:repeat(7,minmax(0,1fr))}
+.g21{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+.mt{margin-top:18px}.mt2{margin-top:26px}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sp{flex:1}
+.sec{display:flex;align-items:center;gap:10px;margin:28px 0 12px}
+.sec h2{margin:0}
+/* chips */
+.ch{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:99px;font:600 12px Inter;white-space:nowrap}
+.ch.g{background:var(--okb);color:var(--ok)}.ch.r{background:var(--erb);color:var(--er)}.ch.y{background:var(--wab);color:var(--wa)}
+.ch.n{background:var(--nb);color:var(--tx2)}.ch.o{background:var(--or3);color:var(--or2)}.ch.a{background:var(--atb);color:var(--at)}.ch.x{background:var(--exb);color:var(--ex)}.ch.b{background:var(--atb);color:var(--at)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ch.o{color:var(--or1)}}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+/* buttons */
+.btn{border:0;border-radius:13px;padding:10px 16px;font:600 13.5px Inter;cursor:pointer;background:var(--card);color:var(--tx);box-shadow:inset 0 0 0 1px var(--ln),0 2px 0 var(--ln);transition:transform .12s,box-shadow .12s,filter .12s;display:inline-flex;align-items:center;gap:7px;justify-content:center}
+.btn:hover{filter:brightness(1.04);transform:translateY(-1px)}
+.btn:active{transform:translateY(2px);box-shadow:inset 0 0 0 1px var(--ln)}
+.btn.pri{background:linear-gradient(180deg,var(--or1),var(--or));color:#fff;box-shadow:0 3px 0 var(--or2)}
+.btn.ok{background:var(--ok);color:#fff;box-shadow:0 3px 0 var(--ok2)}
+.btn.er{background:var(--er);color:#fff;box-shadow:0 3px 0 var(--er2)}
+.btn.gr{background:var(--gr);color:#fff;box-shadow:0 3px 0 #15181A}
+.btn.wa{background:var(--wa2);color:#2a1d00;box-shadow:0 3px 0 #a87300}
+.btn.sm{padding:6px 11px;font-size:12.5px;border-radius:10px}
+.btn:disabled{opacity:.42;cursor:not-allowed;transform:none;filter:none}
+.acts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.big{border:0;min-height:118px;border-radius:24px;background:linear-gradient(180deg,var(--or1),var(--or));color:#fff;font:700 14.5px Poppins;letter-spacing:.05em;box-shadow:0 7px 0 var(--or2),0 16px 28px rgba(242,106,27,.32);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:transform .12s,box-shadow .12s,filter .15s;padding:14px;text-align:center}
+.big:hover{filter:brightness(1.05);transform:translateY(-2px)}
+.big:active{transform:translateY(6px);box-shadow:0 1px 0 var(--or2),0 6px 12px rgba(242,106,27,.25)}
+.big .bi{width:48px;height:48px;border-radius:16px;background:rgba(255,255,255,.2);display:grid;place-items:center}
+.big.gn{background:linear-gradient(180deg,#2BB56C,var(--ok));box-shadow:0 7px 0 var(--ok2),0 16px 28px rgba(30,158,90,.3)}
+.big.gn:active{box-shadow:0 1px 0 var(--ok2)}
+.big.gt{background:linear-gradient(180deg,#4A5056,var(--gr));box-shadow:0 7px 0 #15181A,0 16px 28px rgba(0,0,0,.25)}
+.big.gt:active{box-shadow:0 1px 0 #15181A}
+.big:disabled{opacity:.4;cursor:not-allowed;transform:none;filter:grayscale(.3)}
+/* stats */
+.cnts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.cn{border-radius:12px;padding:9px 2px;text-align:center;min-width:0}
+.cn b{display:block;font:700 22px Poppins}.cn span{font-size:10.5px;font-weight:600;display:block;overflow:hidden;text-overflow:ellipsis}
+.cn.y{background:var(--wab);color:var(--wa)}.cn.g{background:var(--okb);color:var(--ok)}.cn.r{background:var(--erb);color:var(--er)}
+.kpi{cursor:pointer;position:relative;overflow:hidden}
+.kpi b{display:block;font:700 30px Poppins;line-height:1.1;margin-top:6px}
+.kpi .kl{font:600 12.5px Inter;color:var(--tx2)}
+.kpi .kb{position:absolute;right:14px;top:14px;width:36px;height:36px;border-radius:12px;display:grid;place-items:center}
+.kpi.o .kb{background:var(--or3);color:var(--or)}.kpi.g .kb{background:var(--okb);color:var(--ok)}.kpi.r .kb{background:var(--erb);color:var(--er)}.kpi.y .kb{background:var(--wab);color:var(--wa)}.kpi.a .kb{background:var(--atb);color:var(--at)}
+/* week */
+.wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:12px}
+.wd{background:var(--card);border:1px solid var(--ln);border-radius:18px;padding:14px;box-shadow:var(--sh);cursor:pointer;transition:transform .15s;min-height:150px;display:flex;flex-direction:column;gap:6px}
+.wd:hover{transform:translateY(-3px)}
+.wd.hj{border:2px solid var(--or)}
+.wd.off{opacity:.62}
+.wd .wn{font:700 13px Poppins;color:var(--or)}.wd .wdt{font:700 20px Poppins}
+.wd .tg{font-size:11.5px}
+/* table */
+.tw{overflow:auto;border-radius:16px}
+.tb{width:100%;border-collapse:collapse;min-width:640px}
+.tb th{text-align:left;font:600 11.5px Inter;color:var(--tx2);text-transform:uppercase;letter-spacing:.05em;padding:10px 12px;border-bottom:1px solid var(--ln);white-space:nowrap;background:var(--card);position:sticky;top:0}
+.tb td{padding:11px 12px;border-bottom:1px solid var(--ln);vertical-align:middle}
+.tb tr:last-child td{border-bottom:0}
+.tb tr:hover td{background:rgba(242,106,27,.035)}
+.who{display:flex;align-items:center;gap:9px;font-weight:600}
+/* forms */
+label{display:block;font:600 12.5px Inter;color:var(--tx2);margin:14px 0 6px}
+input,select,textarea{width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--ln);background:var(--card);color:var(--tx);font:14px Inter;outline:none;transition:border .15s,box-shadow .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--or);box-shadow:0 0 0 3px rgba(242,106,27,.18)}
+input[type=checkbox],input[type=radio]{width:auto;accent-color:var(--or)}
+.chk{display:inline-flex;align-items:center;gap:6px;margin:4px 12px 4px 0;font-weight:500;color:var(--tx)}
+.fl{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.fl>div{flex:1;min-width:150px}
+.fl label{margin-top:0}
+/* messages */
+.msg{display:flex;gap:9px;align-items:flex-start;padding:12px 14px;border-radius:14px;font-weight:600;font-size:13.5px;margin-top:12px;animation:fade .2s}
+.msg.ok{background:var(--okb);color:var(--ok)}.msg.er{background:var(--erb);color:var(--er)}.msg.wa{background:var(--wab);color:var(--wa)}.msg.in{background:var(--nb);color:var(--tx2);font-weight:500}
+/* tabs */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;background:var(--card);padding:6px;border-radius:16px;box-shadow:var(--sh);border:1px solid var(--ln);margin-bottom:16px}
+.tab{border:0;background:none;padding:10px 14px;border-radius:12px;font:600 13px Inter;color:var(--tx2);cursor:pointer;display:inline-flex;gap:7px;align-items:center}
+.tab.on{background:var(--or);color:#fff;box-shadow:0 3px 0 var(--or2)}
+.tab .bd{background:var(--er);color:#fff;border-radius:99px;font-size:11px;padding:0 7px}
+.tab.on .bd{background:#fff;color:var(--or2)}
+/* calendar */
+.calh{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.calh h2{margin:0;text-transform:capitalize;min-width:180px;text-align:center}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}
+.cw{font:600 11.5px Inter;color:var(--tx3);text-align:center;text-transform:uppercase;padding:4px 0}
+.cd{min-height:96px;border-radius:14px;background:var(--bg);padding:7px;cursor:pointer;border:1px solid transparent;transition:transform .12s,border-color .12s;display:flex;flex-direction:column;gap:3px;min-width:0}
+.cd:hover{border-color:var(--or);transform:translateY(-1px)}
+.cd.out{opacity:.35}.cd.hj{box-shadow:inset 0 0 0 2px var(--or);background:var(--or3)}
+.cd .nn{font:700 13px Poppins}
+.tg{display:block;font:600 10.5px Inter;border-radius:7px;padding:2px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tg.o{background:var(--or);color:#fff}.tg.a{background:var(--atb);color:var(--at)}.tg.x{background:var(--exb);color:var(--ex)}.tg.g{background:var(--okb);color:var(--ok)}.tg.y{background:var(--wab);color:var(--wa)}.tg.r{background:var(--erb);color:var(--er)}.tg.n{background:var(--nb);color:var(--tx2)}.tg.s{background:var(--gr);color:#fff}.ch.s{background:var(--gr);color:#fff}
+.leg{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;font-size:12px;color:var(--tx2)}
+.leg span{display:inline-flex;align-items:center;gap:6px}
+.leg i{width:12px;height:12px;border-radius:4px;display:inline-block}
+/* steps */
+.steps{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.st{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;background:var(--nb);font-size:12.5px;font-weight:600;color:var(--tx2)}
+.st b{width:22px;height:22px;border-radius:50%;background:var(--or);color:#fff;display:grid;place-items:center;font-size:11px}
+/* markings */
+.mk{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.mk div{background:var(--bg);border-radius:14px;padding:12px;text-align:center}
+.mk span{display:block;font-size:11.5px;color:var(--tx2);font-weight:600}
+.mk b{font:700 22px Poppins}
+.clock{font:700 44px Poppins;letter-spacing:.02em;line-height:1}
+/* list items */
+.li{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--ln)}
+.li:last-child{border-bottom:0}
+.li .lx{flex:1;min-width:0}
+.unr{border-left:4px solid var(--or);padding-left:12px}
+/* modal & toast */
+#ov{position:fixed;inset:0;background:rgba(18,20,22,.55);display:none;place-items:center;z-index:100;padding:16px;backdrop-filter:blur(2px)}
+#ov.on{display:grid}
+.md{background:var(--card);border-radius:24px;max-width:580px;width:100%;max-height:92vh;overflow:auto;box-shadow:0 30px 80px rgba(0,0,0,.35);animation:pop .2s ease}
+@keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+.mh{display:flex;align-items:center;gap:10px;padding:18px 22px;border-bottom:1px solid var(--ln);position:sticky;top:0;background:var(--card);z-index:1}
+.mh h3{flex:1}
+.mb{padding:4px 22px 18px}
+.mf{display:flex;gap:10px;justify-content:flex-end;padding:14px 22px;border-top:1px solid var(--ln);flex-wrap:wrap;position:sticky;bottom:0;background:var(--card)}
+.xb{border:0;background:var(--nb);color:var(--tx2);width:34px;height:34px;border-radius:10px;cursor:pointer;display:grid;place-items:center}
+#tst{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;align-items:center;width:max-content;max-width:calc(100vw - 32px)}
+.t{display:flex;gap:9px;align-items:center;padding:13px 18px;border-radius:15px;color:#fff;font-weight:600;box-shadow:0 12px 30px rgba(0,0,0,.25);animation:pop .2s}
+.t.ok{background:var(--ok)}.t.er{background:var(--er)}
+.empty{text-align:center;color:var(--tx3);padding:26px 10px}
+.kv{display:grid;grid-template-columns:150px 1fr;gap:6px 12px;font-size:13.5px}
+.kv dt{color:var(--tx2);font-weight:600}.kv dd{margin:0}
+@media (max-width:1180px){.g5{grid-template-columns:repeat(3,minmax(0,1fr))}.wk{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:900px){
+ #app.on{grid-template-columns:minmax(0,1fr)}
+ #side{position:fixed;left:0;top:0;width:270px;transform:translateX(-102%);transition:transform .25s ease;box-shadow:20px 0 40px rgba(0,0,0,.3)}
+ #side.open{transform:none}
+ #scrim.on{display:block;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:55}
+ .hb.menu{display:grid}
+ .g4,.acts{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .g3{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .g21{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:600px){
+ #hdr{padding:16px 16px 64px}#main{padding:0 16px 36px}
+ .hi h1{font-size:19px}.av{width:54px;height:54px;font-size:18px}.av.hd{width:78px;height:78px;font-size:26px}.avw .cam{width:28px;height:28px}.crop{width:220px;height:220px}
+ .hb{width:40px;height:40px}
+ .hrow{flex-wrap:wrap}
+ .g5,.g3,.g2{grid-template-columns:minmax(0,1fr)}
+ .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .wk{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .big{min-height:100px;font-size:12.5px}
+ .mk{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .cd{min-height:58px;padding:4px}
+ .cd .tg{font-size:0;padding:0;height:6px;border-radius:3px}
+ .kv{grid-template-columns:1fr}
+ .clock{font-size:36px}
+}
+</style>
+
+<div id="login"><div class="lc">
+ <div class="lg"><b>M</b><div><h1>MARTE | GESTÃO DE EQUIPE</h1><p>Faculdade Anhanguera · Campus Marte</p></div></div>
+ <div id="lbody"></div>
+</div></div>
+
+<div id="app">
+ <aside id="side"></aside>
+ <div id="scrim" onclick="menuM(false)"></div>
+ <div id="wrap"><header id="hdr"></header><main id="main"></main></div>
+</div>
+<div id="ov"></div>
+<div id="tst"></div>
+
+<script>
+"use strict";
+/* ===== util ===== */
+const DN=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const DL=['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+const MES=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const TIPOS={fech:'Fechamento',atend:'Atendimento',ext:'Agenda externa'};
+const FECH={ini:'12:00',fim:'21:00'};
+const GESTOR={nome:'Bruno Dias',cargo:'Coordenador Comercial'};
+const pad=n=>String(n).padStart(2,'0');
+const isoD=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const pD=s=>{const[a,b,c]=s.split('-').map(Number);return new Date(a,b-1,c)};
+const hoje=()=>isoD(new Date());
+const addD=(s,n)=>{const d=pD(s);d.setDate(d.getDate()+n);return isoD(d)};
+const dow=s=>pD(s).getDay();
+const segunda=s=>{const w=dow(s);return addD(s,w===0?-6:1-w)};
+const fD=s=>{const d=pD(s);return DN[d.getDay()]+', '+pad(d.getDate())+'/'+pad(d.getMonth()+1)};
+const fDL=s=>{const d=pD(s);return DL[d.getDay()]+', '+d.getDate()+' de '+MES[d.getMonth()]};
+const fDH=s=>{if(!s)return'';const d=new Date(s);return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()+' '+pad(d.getHours())+':'+pad(d.getMinutes())};
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+const t2m=t=>{if(!t)return null;const[a,b]=t.split(':').map(Number);return a*60+b};
+const m2h=m=>(m<0?'−':m>0?'+':'')+Math.floor(Math.abs(m)/60)+'h'+pad(Math.abs(m)%60);
+const agoraHM=()=>{const d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes())};
+const agora=()=>new Date().toISOString();
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-3);
+const $=s=>document.querySelector(s);
+const norm=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
+const ini=n=>String(n||'?').split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase();
+
+const P={home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+swap:'<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>',
+sun:'<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/>',
+bell:'<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>',
+users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+inbox:'<polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>',
+msg:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+up:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>',
+shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/>',
+user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+out:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>',
+menu:'<line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>',
+star:'<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+check:'<polyline points="20 6 9 17 4 12"/>',x:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+pin:'<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
+head:'<path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>',
+file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
+left:'<polyline points="15 18 9 12 15 6"/>',right:'<polyline points="9 18 15 12 9 6"/>',
+alert:'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+login:'<path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/>',
+coffee:'<path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>',
+cam:'<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',
+edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+tool:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
+mon:'<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>'};
+const ic=(n,s=20,w=2)=>`<svg class="i" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${P[n]||''}</svg>`;
+
+/* ===== dados iniciais (exatamente o informado; ausências = pendente/não informado) ===== */
+const SEED=[
+ {id:'mateus',nome:'Mateo',alias:'Mateus',fech:1,atend:2,ext:[2],extObs:'',ini:'09:00',fim:'18:00'},
+ {id:'diego',nome:'Diego',fech:1,atend:3,ext:[4],extObs:'',ini:'09:00',fim:'18:00'},
+ {id:'ryan',nome:'Ryan',fech:2,atend:5,ext:[3,4],extObs:'',ini:'09:00',fim:'18:00'},
+ {id:'arthur',nome:'Arthur',fech:2,atend:1,ext:[3],extObs:'',ini:'09:00',fim:'18:00'},
+ {id:'thiago',nome:'Thiago',fech:3,atend:1,ext:[2],extObs:'',ini:'09:00',fim:'18:00'},
+ {id:'vitor',nome:'Vitor',fech:3,atend:4,ext:[1],extObs:'',ini:'10:00',fim:'19:00'},
+ {id:'vitoria',nome:'Vitória',fech:4,atend:2,ext:[3],extObs:'Variável',ini:'09:00',fim:'18:00'},
+ {id:'esther',nome:'Esther',fech:4,atend:5,ext:[3],extObs:'Geralmente quarta-feira',ini:'09:00',fim:'18:00'},
+ {id:'millena',nome:'Millena',fech:null,atend:null,ext:[],extObs:'Sem agenda externa',ini:'09:00',fim:'18:00'},
+ {id:'julia',nome:'Giulia',alias:'Júlia',fech:null,atend:null,ext:'pend',extObs:'Não informado',ini:'09:00',fim:'18:00'},
+ {id:'gisele',nome:'Gisele',fech:'pend',atend:'pend',ext:'pend',extObs:'Pendente de confirmação',ini:'pend',fim:'pend'}];
+function seed(){return{v:1,equipe:SEED.map(c=>({...c,email:'',obs:'',foto:null,ativo:true})),excecoes:[],diasUteis:[1,2,3,4,5],sabado:{ativo:true,ini:'09:00',fim:'13:00'},ponto:{},folgas:[],ausencias:[],trocas:[],ajustes:[],dispositivos:[],notifs:[],alinh:[],externas:[],audit:[{q:agora(),u:'Sistema',op:'Cadastro inicial da equipe e escalas',antes:'',depois:'11 consultores'}],criado:agora()}}
+const K='marteGE_v2';
+function load(){try{const j=localStorage.getItem(K);if(j){const o=JSON.parse(j);if(o&&o.v===1){o.excecoes=o.excecoes||[];o.sabado=o.sabado||{ativo:true,ini:'09:00',fim:'13:00'};const m=o.equipe.find(c=>c.id==='mateus'),j=o.equipe.find(c=>c.id==='julia');if(m&&m.nome==='Mateus'){m.nome='Mateo';m.alias='Mateus';if(m.apelido==='Mateo')m.apelido=''}if(j&&j.nome==='Júlia'){j.nome='Giulia';j.alias='Júlia'}return o}}}catch(e){}return seed()}
+function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
+let S=load(),U=null,VIEW='inicio',TAB='folgas',CALM=null,GW=0,GCID=null,TF={},IMP=null,PF={},AQ='';
+let DEV=null;try{DEV=localStorage.getItem('marteGE_dev')}catch(e){}
+if(!DEV){DEV='nav-'+uid();try{localStorage.setItem('marteGE_dev',DEV)}catch(e){}}
+function devLabel(){const u=navigator.userAgent;const b=/Edg\//.test(u)?'Edge':/Chrome\//.test(u)?'Chrome':/Firefox\//.test(u)?'Firefox':/Safari\//.test(u)?'Safari':'Navegador';const o=/Windows/.test(u)?'Windows':/Android/.test(u)?'Android':/iPhone|iPad/.test(u)?'iOS':/Mac OS/.test(u)?'macOS':/Linux/.test(u)?'Linux':'';return b+(o?' · '+o:'')}
+
+/* ===== acesso a dados ===== */
+const cons=id=>S.equipe.find(c=>c.id===id);
+const ativos=()=>S.equipe.filter(c=>c.ativo);
+const nomeDe=id=>id==='gestor'?GESTOR.nome:(cons(id)?.nome||'—');
+const me=()=>cons(U.id);
+const nomeU=()=>U?(U.tipo==='gestor'?GESTOR.nome:me().nome):'Sistema';
+function avatar(c,cls=''){const n=esc(c?c.nome:GESTOR.nome);if(c&&c.foto)return`<div class="av ${cls}" title="${n}"><img src="${c.foto}" alt="Foto de ${n}"></div>`;return`<div class="av ${cls}" title="${n}">${esc(ini(c?c.nome:GESTOR.nome))}</div>`}
+const chamado=c=>c.apelido||c.nome;
+const nomeComp=c=>c.nomeCompleto||c.nome;
+function audit(op,antes,depois){const f=v=>v==null?'':typeof v==='string'?v:Object.entries(v).filter(([k,x])=>x!=null&&x!=='').map(([k,x])=>k+': '+(Array.isArray(x)?x.join(', '):x)).join(' · ');S.audit.unshift({q:agora(),u:nomeU(),op,antes:f(antes),depois:f(depois)})}
+function notif(para,txt,ir){S.notifs.unshift({id:uid(),para,txt,ir:ir||'',lida:false,q:agora()})}
+const minhasNotifs=()=>S.notifs.filter(n=>n.para===(U.tipo==='gestor'?'gestor':U.id));
+const naoLidas=()=>minhasNotifs().filter(n=>!n.lida).length;
+const reg=(cid,iso)=>S.ponto[cid+'|'+iso];
+
+/* ===== escala ===== */
+function baseTem(c,tipo,iso){const w=dow(iso),v=c[tipo];if(tipo==='sab')return w===6&&!!S.sabado&&S.sabado.ativo&&c.sab!==false;if(tipo==='ext')return Array.isArray(v)&&v.includes(w);return v===w}
+function tem(cid,tipo,iso){const c=cons(cid);if(!c||!c.ativo)return false;let v=baseTem(c,tipo,iso);
+ for(const t of S.trocas){if(t.status!=='aprovada'||t.tipo!==tipo)continue;
+  if(t.data===iso){if(t.cid===cid)v=false;if(t.sub===cid)v=true}
+  if(t.modo==='troca'&&t.data2===iso){if(t.sub===cid)v=false;if(t.cid===cid)v=true}}
+ for(const x of S.excecoes){if(x.ativo&&x.tipo===tipo&&x.data===iso&&x.cid===cid)v=x.acao==='add'}
+ return v}
+const folgaDia=(cid,iso)=>S.folgas.find(f=>f.cid===cid&&f.data===iso&&f.status!=='recusada');
+const ausDia=(cid,iso)=>S.ausencias.find(a=>a.cid===cid&&a.data===iso);
+function plano(cid,iso){const c=cons(cid);if(!c)return null;const f=folgaDia(cid,iso);
+ if(f&&f.status==='aprovada')return{folga:true};
+ if(tem(cid,'fech',iso))return{ini:FECH.ini,fim:FECH.fim,fech:true};
+ if(dow(iso)===6&&S.sabado&&S.sabado.ativo)return tem(cid,'sab',iso)?{ini:S.sabado.ini,fim:S.sabado.fim,sab:true}:null;
+ if(!S.diasUteis.includes(dow(iso)))return null;
+ if(c.ini==='pend'||!c.ini||!c.fim)return{pend:true};
+ return{ini:c.ini,fim:c.fim}}
+function planoTxt(p){if(!p)return'Sem escala';if(p.folga)return'Folga';if(p.pend)return'Horário pendente';return p.ini.replace(':00','h').replace(':','h')+' – '+p.fim.replace(':00','h').replace(':','h')+(p.fech?' · Fechamento':p.sab?' · Sábado':'')}
+function proximo(cid,tipo,de){de=de||hoje();const c=cons(cid);for(let i=0;i<70;i++){const d=addD(de,i);if(tem(cid,tipo,d))return d}return c&&c[tipo]==='pend'?'pend':null}
+const trocasPend=(cid,iso)=>S.trocas.filter(t=>['colega','gestor'].includes(t.status)&&((t.data===iso&&(t.cid===cid||t.sub===cid))||(t.modo==='troca'&&t.data2===iso&&(t.cid===cid||t.sub===cid))));
+function tagsDia(cid,iso){const r=[];
+ if(tem(cid,'fech',iso))r.push(['o','Fechamento 12h–21h']);
+ if(tem(cid,'sab',iso))r.push(['s','Sábado '+S.sabado.ini.replace(':00','h')+'–'+S.sabado.fim.replace(':00','h')]);
+ if(tem(cid,'atend',iso))r.push(['a','Atendimento']);
+ if(tem(cid,'ext',iso))r.push(['x','Agenda externa']);
+ const f=folgaDia(cid,iso);if(f)r.push(f.status==='aprovada'?['g','Folga']:['y','Folga pendente']);
+ const a=ausDia(cid,iso);if(a)r.push(a.status==='justificada'?['g','Ausência justificada']:a.status==='nao_justificada'?['r','Ausência não justificada']:['y','Ausência informada']);
+ if(trocasPend(cid,iso).length)r.push(['y','Troca pendente']);
+ if(S.trocas.some(t=>t.status==='aprovada'&&(t.cid===cid||t.sub===cid)&&(t.data===iso||t.data2===iso)))r.push(['b','Troca aprovada']);
+ if(S.excecoes.some(x=>x.ativo&&x.cid===cid&&x.data===iso))r.push(['b','Exceção do gestor']);
+ return r}
+
+/* ===== ponto: apuração (tolerância art. 58 §1º CLT: 5 min por marcação, máx. 10 min/dia) ===== */
+function apurar(cid,iso){const p=plano(cid,iso),r=reg(cid,iso)||{},a=ausDia(cid,iso),hj=hoje();
+ const base={k:'',txt:'',cls:'n',saldo:0,fl:[]};
+ if(a&&!r.ent)return{...base,k:'aus',fl:['aus'],txt:'Ausência informada · '+(a.status==='justificada'?'justificada':a.status==='nao_justificada'?'não justificada':'pendente'),cls:a.status==='justificada'?'g':a.status==='nao_justificada'?'r':'y'};
+ if(!r.ent){if(!p)return{...base,k:'-',txt:'Sem escala'};if(p.folga)return{...base,k:'folga',txt:'Folga aprovada',cls:'g'};if(p.pend)return{...base,k:'-',txt:'Horário pendente',cls:'y'};
+  if(iso<isoD(new Date(S.criado)))return{...base,k:'-',txt:'Antes do início do uso'};
+  if(iso<hj)return{...base,k:'poss',fl:['poss'],txt:'Sem registro · possível ausência',cls:'r'};
+  if(iso===hj)return{...base,k:'agu',txt:'Aguardando entrada'};return{...base,k:'fut',txt:'Previsto'}}
+ if(!r.sai||(r.ii&&!r.if)){if(iso<hj)return{...base,k:'inc',fl:['inc'],txt:'Registro incompleto',cls:'y'};
+  const at=p&&p.ini&&t2m(r.ent)-t2m(p.ini)>5;return{...base,k:'jor',fl:at?['atraso']:[],txt:(r.ii&&!r.if?'Em intervalo':'Em jornada')+(at?' · entrada com atraso':''),cls:at?'r':'b'}}
+ if(!p||p.pend||p.folga){const w=t2m(r.sai)-t2m(r.ent)-(r.ii&&r.if?t2m(r.if)-t2m(r.ii):0);return{...base,k:'fora',fl:['adic'],txt:'Registro fora da escala',cls:'y',saldo:0,trab:w}}
+ const de=t2m(r.ent)-t2m(p.ini),ds=t2m(r.sai)-t2m(p.fim);
+ const trab=t2m(r.sai)-t2m(r.ent)-(r.ii&&r.if?t2m(r.if)-t2m(r.ii):0);
+ if(Math.abs(de)<=5&&Math.abs(ds)<=5&&Math.abs(de)+Math.abs(ds)<=10)return{...base,k:'pont',fl:['pont'],txt:'Pontual',cls:'g',trab};
+ const atr=Math.max(0,de),ant=Math.max(0,-ds),adi=Math.max(0,-de)+Math.max(0,ds),fl=[],tx=[];
+ if(atr){fl.push('atraso');tx.push('Atraso '+atr+' min')}if(ant){fl.push('antec');tx.push('Saída antecipada '+ant+' min')}if(adi){fl.push('adic');tx.push('Tempo adicional '+adi+' min')}
+ return{...base,k:'dif',fl,txt:tx.join(' · '),cls:(atr||ant)?'r':'y',saldo:adi-atr-ant,trab,atr,ant,adi}}
+const chip=(cls,txt,i)=>`<span class="ch ${cls}">${i?ic(i,13,2.4):''}${esc(txt)}</span>`;
+const stChip=s=>({pendente:chip('y','Pendente'),aprovada:chip('g','Aprovada'),aprovado:chip('g','Aprovado'),recusada:chip('r','Recusada'),recusado:chip('r','Recusado'),justificada:chip('g','Justificada'),nao_justificada:chip('r','Não justificada'),colega:chip('y','Aguardando colega'),gestor:chip('y','Aguardando gestor'),recusada_colega:chip('r','Recusada pelo colega'),cancelada:chip('n','Cancelada'),autorizado:chip('g','Autorizado'),revogado:chip('n','Revogado')}[s]||chip('n',s));
+
+/* ===== UI básica ===== */
+function toast(t,tipo='ok'){const d=document.createElement('div');d.className='t '+tipo;d.innerHTML=ic(tipo==='ok'?'check':'alert',18,2.6)+esc(t);$('#tst').appendChild(d);setTimeout(()=>d.remove(),tipo==='ok'?3200:4800)}
+function modal(tit,html,btns){$('#ov').innerHTML=`<div class="md" role="dialog" aria-modal="true"><div class="mh"><h3>${tit}</h3><button class="xb" onclick="fecharM()" aria-label="Fechar">${ic('x',18)}</button></div><div class="mb">${html}<div id="merr"></div></div>${btns?`<div class="mf">${btns}</div>`:''}</div>`;$('#ov').classList.add('on')}
+function fecharM(){$('#ov').classList.remove('on');$('#ov').innerHTML=''}
+$('#ov').addEventListener('click',ev=>{if(ev.target.id==='ov')fecharM()});
+function merr(t){const m=$('#merr');if(m)m.innerHTML=t?`<div class="msg er">${ic('alert',18)}<span>${esc(t)}</span></div>`:'';return false}
+const val=s=>{const x=$(s);return x?x.value.trim():''};
+function menuM(o){$('#side').classList.toggle('open',o);$('#scrim').classList.toggle('on',o)}
+
+/* ===== login + dispositivo ===== */
+function renderLogin(msg){U=null;$('#app').classList.remove('on');$('#login').style.display='';
+ const ops=ativos().map(c=>`<option value="${c.id}">${esc(c.nome)}</option>`).join('');
+ $('#lbody').innerHTML=`
+ <label>Usuário (e-mail corporativo)</label>
+ <select id="lu"><optgroup label="Gestor"><option value="gestor">${GESTOR.nome} — Gestor</option></optgroup><optgroup label="Consultores de Carreiras">${ops}</optgroup></select>
+ <label>Senha individual</label><input id="lp" type="password" placeholder="Sua senha" onkeydown="if(event.key==='Enter')entrar()">
+ ${msg||''}
+ <button class="btn pri" style="width:100%;margin-top:18px;padding:14px;font-size:15px" onclick="entrar()">${ic('login',18)} ENTRAR</button>
+`}
+function novoDev(){DEV='nav-'+uid();try{localStorage.setItem('marteGE_dev',DEV)}catch(e){}renderLogin(`<div class="msg ok">${ic('check',18)}Novo dispositivo simulado neste navegador.</div>`)}
+function entrar(){const id=val('#lu'),pw=$('#lp').value;
+ if(!pw)return renderLogin(`<div class="msg er">${ic('alert',18)}Informe a senha.</div>`),void($('#lu').value=id);
+ if(id==='gestor'){U={tipo:'gestor',id:'gestor'};return iniciarApp()}
+ const c=cons(id);let d=S.dispositivos.find(x=>x.cid===id&&x.dev===DEV&&['autorizado','pendente'].includes(x.status));
+ if(d&&d.status==='autorizado'){U={tipo:'consultor',id};return iniciarApp()}
+ if(!d){d={id:uid(),cid:id,dev:DEV,label:devLabel(),status:'pendente',q:agora()};S.dispositivos.unshift(d);
+  const ant=S.dispositivos.find(x=>x.cid===id&&x.status==='autorizado');
+  notif('gestor',`${c.nome} solicitou acesso por um novo dispositivo (${d.label})${ant?' — o dispositivo atual será revogado se aprovado':''}.`,'g_sol:disp');
+  audit('Solicitação de autorização de dispositivo',null,{consultor:c.nome,dispositivo:d.label});save()}
+ $('#lbody').innerHTML=`<div class="msg wa" style="margin-top:0">${ic('shield',20)}<span>Este dispositivo ainda não está autorizado para <b>${esc(c.nome)}</b>. A solicitação foi enviada ao gestor; após a aprovação, entre novamente.</span></div>
+ <div class="ldev">Dispositivo: <b>${esc(d.label)}</b> · ${esc(DEV.slice(-6))}<br>Solicitado em ${fDH(d.q)}</div>
+ <button class="btn" style="width:100%;margin-top:14px" onclick="renderLogin()">Voltar</button>
+ <button class="btn gr" style="width:100%;margin-top:10px" onclick="demoAprovar('${d.id}','${id}')">Demonstração: aprovar como gestor e entrar</button>`}
+function demoAprovar(did,cid){U={tipo:'gestor',id:'gestor'};aprovarDisp(did);U={tipo:'consultor',id:cid};save();iniciarApp()}
+function aprovarDisp(did,resp){const d=S.dispositivos.find(x=>x.id===did);if(!d)return;const c=cons(d.cid);
+ S.dispositivos.filter(x=>x.cid===d.cid&&x.status==='autorizado').forEach(x=>{x.status='revogado';x.fim=agora()});
+ d.status='autorizado';d.dec=agora();d.resp=resp||'';audit('Autorização de dispositivo',{status:'pendente'},{consultor:c.nome,dispositivo:d.label,status:'autorizado (anterior revogado)'});
+ notif(d.cid,'Seu novo dispositivo foi autorizado pelo gestor.','perfil')}
+function sair(){U=null;try{sessionStorage.removeItem('marteGE_u')}catch(e){}renderLogin()}
+
+/* ===== shell ===== */
+function iniciarApp(){try{sessionStorage.setItem('marteGE_u',JSON.stringify(U))}catch(e){}
+ $('#login').style.display='none';$('#app').classList.add('on');if(!CALM){const d=new Date();CALM={y:d.getFullYear(),m:d.getMonth()}}
+ if(U.tipo==='gestor')avisoIncompletos();go(U.tipo==='gestor'?'g_inicio':'inicio');
+ if(U.tipo==='consultor'){const c=me();if(!c.foto&&!c.fotoPulou)setTimeout(boasVindasFoto,350)}}
+function avisoIncompletos(){const h=hoje();if(S.notifs.some(n=>n.para==='gestor'&&n.chave==='inc'+h))return;let n=0;for(let i=1;i<=7;i++){const d=addD(h,-i);ativos().forEach(c=>{if(apurar(c.id,d).k==='inc')n++})}
+ if(n){notif('gestor',n+' registro(s) de ponto incompleto(s) nos últimos 7 dias.','g_ponto');S.notifs[0].chave='inc'+h;save()}}
+function menuItems(){if(U.tipo==='gestor'){const pend=S.folgas.filter(f=>f.status==='pendente').length+S.ausencias.filter(a=>a.status==='pendente').length+S.trocas.filter(t=>t.status==='gestor').length+S.ajustes.filter(a=>a.status==='pendente').length+S.dispositivos.filter(d=>d.status==='pendente').length;
+  return[['g_inicio','grid','Painel do gestor'],['g_ponto','clock','Ponto da equipe'],['g_sol','inbox','Central de solicitações',pend],['g_fech','star','Fechamentos da semana'],['g_sab','sun','Escala de sábado'],['g_ext','pin','Agenda externa'],['g_cal','cal','Calendário da equipe'],['g_equipe','users','Equipe e escalas'],['g_alinh','msg','Alinhamentos da equipe'],['g_import','up','Importar escala'],['g_audit','file','Auditoria'],['notif','bell','Notificações',naoLidas()],'-',['g_demo','tool','Dados de demonstração']]}
+ const al=S.alinh.filter(a=>!a.leit[U.id]).length;
+ return[['inicio','home','Início'],['ponto','clock','Meu ponto'],['folgas','sun','Folgas e ausências'],['troca','swap','Trocar minha escala'],['agenda','cal','Minha agenda'],['alinh','msg','Alinhamentos',al],['notif','bell','Notificações',naoLidas()],['perfil','user','Meu perfil']]}
+function side(){$('#side').innerHTML=`<div class="logo"><b>M</b><div>MARTE<small>GESTÃO DE EQUIPE</small></div></div>`+
+ menuItems().map(m=>m==='-'?'<div class="sep"></div>':`<button class="mi ${VIEW===m[0]?'on':''}" onclick="go('${m[0]}')">${ic(m[1],19)}<span>${m[2]}</span>${m[3]?`<span class="bd">${m[3]}</span>`:''}</button>`).join('')+
+ `<div class="sp"></div><div class="sep"></div><button class="mi" onclick="sair()">${ic('out',19)}<span>Sair</span></button>`}
+function hdr(){const g=U.tipo==='gestor',c=g?null:me(),n=naoLidas();
+ $('#hdr').innerHTML=`<div class="hrow"><button class="hb menu" onclick="menuM(true)" aria-label="Menu">${ic('menu',22)}</button>
+ ${g?`<div onclick="go('g_inicio')" style="cursor:pointer">${avatar(c)}</div>`:`<div class="avw" onclick="go('perfil')">${avatar(c,'hd')}<button class="cam" onclick="event.stopPropagation();escolherFoto()" aria-label="Alterar foto" title="Alterar foto">${ic('cam',16)}</button></div>`}
+ <div class="hi"><h1>Olá, ${esc(g?GESTOR.nome.split(' ')[0]:chamado(c))}!</h1>${g?'':`<div class="nc">${esc(nomeComp(c))}</div>`}<p>${g?GESTOR.cargo+' · Painel do Gestor':'Consultor de Carreiras'}</p><div class="dt">${cap(fDL(hoje()))}</div></div>
+ <div class="hact"><button class="hb" onclick="go('notif')" aria-label="Notificações">${ic('bell',21)}${n?`<span class="cnt">${n}</span>`:''}</button>
+ <button class="hb" onclick="go('${g?'g_equipe':'perfil'}')" aria-label="Perfil">${ic(g?'users':'user',21)}</button></div></div>`}
+function go(v){const[a,b]=String(v).split(':');VIEW=a;if(b)TAB=b;menuM(false);render();window.scrollTo(0,0)}
+function render(){if(!U)return;side();hdr();const f=VIEWS[VIEW]||VIEWS[U.tipo==='gestor'?'g_inicio':'inicio'];
+ $('#main').innerHTML=f();
+ const m=$('#main');m.style.animation='none';void m.offsetWidth;m.style.animation=''}
+const VIEWS={};
+
+/* ===================== CONSULTOR ===================== */
+function cardHead(i,t,cls=''){return`<div class="ch3"><div class="ci" ${cls}>${ic(i,19)}</div><h3>${t}</h3></div>`}
+function proxTxt(cid,tipo){const d=proximo(cid,tipo);if(d==='pend')return`<div class="big1" style="font-size:17px">A confirmar</div>${chip('y','Pendente de confirmação')}`;
+ if(!d)return`<div class="big1" style="font-size:17px">Não previsto</div><p class="mut">Sem ${TIPOS[tipo].toLowerCase()} fixo na escala</p>`;
+ return`<div class="big1" style="font-size:19px">${d===hoje()?'Hoje':cap(fD(d))}</div><p class="sub">${cap(fDL(d))}</p>${tipo==='fech'?`<p class="mt" style="margin-top:8px">${chip('o','12h às 21h','clock')}</p>`:''}`}
+function semanaHTML(cid,base){const s=segunda(base||hoje());let h='';
+ for(let i=0;i<7;i++){const d=addD(s,i),p=plano(cid,d),tg=tagsDia(cid,d),a=apurar(cid,d),r=reg(cid,d);
+  h+=`<div class="wd ${d===hoje()?'hj':''} ${!p&&!tg.length?'off':''}" onclick="diaM('${cid}','${d}')"><div class="wn">${DN[dow(d)]}${d===hoje()?' · hoje':''}</div><div class="wdt">${pad(pD(d).getDate())}/${pad(pD(d).getMonth()+1)}</div>
+  <div class="sub" style="font-weight:600">${planoTxt(p)}</div>${tg.map(t=>`<span class="tg ${t[0]}">${t[1]}</span>`).join('')}
+  ${r&&r.ent?`<span class="mut">Ponto: ${r.ent}${r.sai?' – '+r.sai:''}</span>`:''}${U.tipo==='gestor'&&['pont','dif','inc','poss'].includes(a.k)?`<span>${chip(a.cls,a.k==='dif'?(a.fl.includes('atraso')?'Atraso':a.fl.includes('antec')?'Saída antecipada':'Tempo adicional'):a.txt.split(' · ')[0])}</span>`:''}</div>`}
+ return`<div class="wk">${h}</div>`}
+function minhasSolic(cid){const o={p:0,a:0,r:0};
+ S.folgas.filter(x=>x.cid===cid).forEach(x=>o[x.status==='pendente'?'p':x.status==='aprovada'?'a':'r']++);
+ S.ausencias.filter(x=>x.cid===cid&&x.status==='pendente').forEach(()=>o.p++);
+ S.ajustes.filter(x=>x.cid===cid).forEach(x=>o[x.status==='pendente'?'p':x.status==='aprovado'?'a':'r']++);
+ S.trocas.filter(x=>x.cid===cid&&x.status!=='cancelada').forEach(x=>o[['colega','gestor'].includes(x.status)?'p':x.status==='aprovada'?'a':'r']++);return o}
+VIEWS.inicio=()=>{const c=me(),h=hoje(),p=plano(c.id,h),a=apurar(c.id,h),r=reg(c.id,h)||{},o=minhasSolic(c.id),nx=proximo(c.id,'ext');
+ const al=S.alinh.filter(x=>!x.leit[c.id]);
+ const exts=nx&&nx!=='pend'?S.externas.filter(e=>e.cid===c.id&&e.data===nx):[];
+ const recebidas=S.trocas.filter(t=>t.sub===c.id&&t.status==='colega').length;
+ return`${al.length?`<div class="msg wa" style="margin:0 0 16px;cursor:pointer" onclick="go('alinh')">${ic('msg',18)}<span>Você tem ${al.length} alinhamento${al.length>1?'s':''} da equipe para ler e confirmar.</span></div>`:''}
+ ${recebidas?`<div class="msg wa" style="margin:0 0 16px;cursor:pointer" onclick="go('troca')">${ic('swap',18)}<span>${recebidas} colega${recebidas>1?'s pediram':' pediu'} para trocar escala com você. Toque para responder.</span></div>`:''}
+ <div class="grid g5">
+ <div class="card hov">${cardHead('clock','Meu horário de hoje')}<div class="big1">${planoTxt(p).replace(' · Fechamento','')}</div>${p&&p.fech?chip('o','Dia de fechamento','star'):''}
+  <p class="sub" style="margin-top:8px">Entrada: <b>${r.ent||'--:--'}</b> · Saída: <b>${r.sai||'--:--'}</b></p></div>
+ <div class="card hov">${cardHead('star','Meu próximo fechamento')}${proxTxt(c.id,'fech')}</div>
+ <div class="card hov">${cardHead('head','Meu próximo atendimento','style="background:var(--atb);color:var(--at)"')}${proxTxt(c.id,'atend')}</div>
+ <div class="card hov">${cardHead('pin','Minha agenda externa','style="background:var(--exb);color:var(--ex)"')}${nx==='pend'?`<div class="big1" style="font-size:17px">Não informado</div>${chip('y','Aguardando confirmação')}`:nx?`<div class="big1" style="font-size:19px">${nx===h?'Hoje':cap(fD(nx))}</div>${c.extObs?`<p class="mut">${esc(c.extObs)}</p>`:''}${exts.length?exts.map(e=>`<p class="sub" style="margin-top:6px">${esc(e.hora||'')} ${esc(e.local||'')}<br><span class="mut">${esc(e.obj||'')}</span></p>`).join(''):`<p class="mut" style="margin-top:6px">Local e objetivo ainda não detalhados</p>`}`:`<div class="big1" style="font-size:17px">Sem agenda externa</div><p class="mut">${esc(c.extObs||'Não prevista na escala')}</p>`}</div>
+ <div class="card hov" style="cursor:pointer" onclick="go('folgas')">${cardHead('inbox','Minhas solicitações')}<div class="cnts"><div class="cn y"><b>${o.p}</b><span>Pendentes</span></div><div class="cn g"><b>${o.a}</b><span>Aprovadas</span></div><div class="cn r"><b>${o.r}</b><span>Recusadas</span></div></div></div>
+ </div>
+ <div class="acts mt2">
+  <button class="big" onclick="go('ponto')"><span class="bi">${ic('clock',26)}</span>REGISTRAR PONTO</button>
+  <button class="big" onclick="go('folgas')"><span class="bi">${ic('sun',26)}</span>FOLGAS E AUSÊNCIAS</button>
+  <button class="big" onclick="go('troca')"><span class="bi">${ic('swap',26)}</span>TROCAR MINHA ESCALA</button>
+  <button class="big" onclick="go('agenda')"><span class="bi">${ic('cal',26)}</span>MINHA AGENDA</button>
+ </div>
+ <div class="sec"><h2>Minha semana</h2><span class="sp"></span><button class="btn sm" onclick="go('agenda')">${ic('cal',15)} Calendário do mês</button></div>
+ ${semanaHTML(c.id)}`};
+
+/* ----- ponto ----- */
+const MARC=[['ent','Entrada'],['ii','Início do intervalo'],['if','Fim do intervalo'],['sai','Saída']];
+let PMSG='';
+VIEWS.ponto=()=>{const c=me(),h=hoje(),p=plano(c.id,h),r=reg(c.id,h)||{},a=apurar(c.id,h);
+ const pode={ent:!r.ent,ii:r.ent&&!r.ii&&!r.sai,if:r.ii&&!r.if&&!r.sai,sai:r.ent&&!r.sai&&!(r.ii&&!r.if)};
+ const dias=[];for(let i=0;i<31;i++){const d=addD(h,-i);const pp=plano(c.id,d),rr=reg(c.id,d);if(pp||rr||ausDia(c.id,d))dias.push(d)}
+ let tot=0,n={atraso:0,antec:0,adic:0,inc:0};dias.forEach(d=>{if(d===h)return;const x=apurar(c.id,d);tot+=x.saldo||0;x.fl.forEach(f=>{if(n[f]!=null)n[f]++})});
+ const m=PMSG;PMSG='';
+ return`<div class="grid g2">
+ <div class="card"><div class="row"><div><h2>Registro de hoje</h2><p class="sub">${cap(fDL(h))}</p></div><span class="sp"></span><div style="text-align:right"><div class="clock" id="relogio">${agoraHM()}</div><span class="mut">horário de referência</span></div></div>
+  <div class="row mt"><span class="sub">Planejado:</span><b>${planoTxt(p)}</b>${p&&p.fech?chip('o','Fechamento substitui o horário habitual','star'):''}</div>
+  <div class="mk mt">${MARC.map(([k,l])=>`<div><span>${l}</span><b style="color:${r[k]?'var(--tx)':'var(--tx3)'}">${r[k]||'--:--'}</b></div>`).join('')}</div>
+  <div class="grid g2 mt"><button class="big gn" ${pode.ent?'':'disabled'} onclick="marcar('ent')"><span class="bi">${ic('login',24)}</span>REGISTRAR ENTRADA</button>
+  <button class="big gt" ${pode.sai?'':'disabled'} onclick="marcar('sai')"><span class="bi">${ic('out',24)}</span>REGISTRAR SAÍDA</button></div>
+  <div class="row mt"><button class="btn" ${pode.ii?'':'disabled'} onclick="marcar('ii')">${ic('coffee',16)} Iniciar intervalo</button><button class="btn" ${pode.if?'':'disabled'} onclick="marcar('if')">${ic('clock',16)} Encerrar intervalo</button></div>
+  ${m}</div>
+ <div class="card"><h2>Meus registros</h2><p class="sub">Últimos 30 dias</p>
+  <div class="big1 mt" style="font-size:34px">${dias.filter(d=>(reg(c.id,d)||{}).ent).length}</div><p class="sub">dia(s) com ponto registrado</p>
+  <div class="row mt">${chip('y',S.ajustes.filter(x=>x.cid===c.id&&x.status==='pendente').length+' ajuste(s) pendente(s)')}${chip('g',S.ajustes.filter(x=>x.cid===c.id&&x.status==='aprovado').length+' ajuste(s) autorizado(s)')}</div>
+  <div class="msg in">${ic('file',16)}<span>Esqueceu de marcar ou marcou errado? Use "Solicitar ajuste de ponto". Ferramenta de acompanhamento; não substitui o sistema oficial de ponto da empresa.</span></div></div></div>
+ <div class="sec"><h2>Meu histórico</h2><span class="sp"></span><button class="btn pri sm" onclick="mAjuste()">${ic('edit',15)} Solicitar ajuste de ponto</button></div>
+ <div class="card" style="padding:6px"><div class="tw"><table class="tb"><thead><tr><th>Data</th><th>Planejado</th><th>Entrada</th><th>Intervalo</th><th>Saída</th></tr></thead><tbody>
+ ${dias.map(d=>{const rr=reg(c.id,d)||{},x=apurar(c.id,d);return`<tr><td><b>${fD(d)}</b></td><td>${planoTxt(plano(c.id,d))}</td><td>${rr.ent||'—'}</td><td>${rr.ii?rr.ii+' – '+(rr.if||'…'):'—'}</td><td>${rr.sai||'—'}${rr.aj?' '+chip('b','ajustado'):''}</td></tr>`}).join('')||'<tr><td colspan="5" class="empty">Sem registros</td></tr>'}
+ </tbody></table></div></div>
+ ${(()=>{const aj=S.ajustes.filter(x=>x.cid===c.id);return aj.length?`<div class="sec"><h2>Meus pedidos de ajuste</h2></div><div class="card" style="padding:6px"><div class="tw"><table class="tb"><thead><tr><th>Data</th><th>Marcação</th><th>Horário pedido</th><th>Justificativa</th><th>Situação</th><th>Resposta</th></tr></thead><tbody>${aj.map(x=>`<tr><td>${fD(x.data)}</td><td>${MARC.find(m=>m[0]===x.campo)[1]}</td><td><b>${x.hora}</b></td><td>${esc(x.just)}</td><td>${stChip(x.status)}</td><td>${esc(x.resp||'')}</td></tr>`).join('')}</tbody></table></div></div>`:''})()}`};
+function marcar(k){const h=hoje(),key=U.id+'|'+h,r=S.ponto[key]||{},nome=MARC.find(m=>m[0]===k)[1];
+ const erro=t=>{PMSG=`<div class="msg er">${ic('alert',18)}<span>${t}</span></div>`;render()};
+ if(r[k])return erro(`${nome} já registrada hoje às ${r[k]}. Não é possível registrar em duplicidade.`);
+ if(r.sai)return erro('Sua jornada de hoje já foi encerrada.');
+ if(k!=='ent'&&!r.ent)return erro('Registre a entrada primeiro.');
+ if(k==='if'&&!r.ii)return erro('Nenhum intervalo em andamento.');
+ if(k==='sai'&&r.ii&&!r.if)return erro('Encerre o intervalo antes de registrar a saída.');
+ const hm=agoraHM();r[k]=hm;r.dev=DEV;S.ponto[key]=r;audit('Registro de ponto: '+nome,null,{consultor:me().nome,data:h,horario:hm});save();
+ const tx=k==='ent'?'ENTRADA REGISTRADA COM SUCESSO!':k==='sai'?'SAÍDA REGISTRADA COM SUCESSO!':nome.toUpperCase()+' REGISTRADO COM SUCESSO!';
+ PMSG=`<div class="msg ok">${ic('check',18)}<span>${tx} <span style="font-weight:500">Horário: ${hm}</span></span></div>`;render()}
+setInterval(()=>{const x=$('#relogio');if(x)x.textContent=agoraHM()},5000);
+function mAjuste(){modal('Solicitar ajuste de ponto',`<p class="sub">O ajuste só é aplicado depois da aprovação do gestor e fica registrado na auditoria.</p>
+ <div class="fl mt"><div><label>Data *</label><input type="date" id="ad" max="${hoje()}" value="${hoje()}"></div><div><label>Marcação *</label><select id="ac">${MARC.map(m=>`<option value="${m[0]}">${m[1]}</option>`).join('')}</select></div><div><label>Horário correto *</label><input type="time" id="ah"></div></div>
+ <label>Justificativa *</label><textarea id="aj" rows="3" placeholder="Ex.: esqueci de registrar a saída"></textarea>`,
+ `<button class="btn" onclick="fecharM()">Cancelar</button><button class="btn pri" onclick="enviarAjuste()">Enviar ao gestor</button>`)}
+function enviarAjuste(){const d=val('#ad'),k=val('#ac'),h=val('#ah'),j=val('#aj');
+ if(!d||d>hoje())return merr('Informe uma data válida (hoje ou anterior).');if(!h)return merr('Informe o horário correto.');if(!j)return merr('A justificativa é obrigatória.');
+ if(S.ajustes.some(x=>x.cid===U.id&&x.data===d&&x.campo===k&&x.status==='pendente'))return merr('Já existe um pedido pendente para esta marcação.');
+ const atual=(reg(U.id,d)||{})[k]||'';S.ajustes.unshift({id:uid(),cid:U.id,data:d,campo:k,hora:h,atual,just:j,status:'pendente',q:agora()});
+ audit('Solicitação de ajuste de ponto',atual?{horario:atual}:null,{consultor:me().nome,data:d,marcacao:k,horario:h});notif('gestor',`${me().nome} pediu ajuste de ponto em ${fD(d)}.`,'g_sol:ajustes');save();fecharM();toast('Pedido de ajuste enviado ao gestor.');render()}
+
+/* ----- folgas e ausências ----- */
+VIEWS.folgas=()=>{const c=me(),fs=S.folgas.filter(f=>f.cid===c.id),as=S.ausencias.filter(a=>a.cid===c.id);
+ return`<div class="grid g2"><button class="big" onclick="mFolga()"><span class="bi">${ic('sun',26)}</span>SOLICITAR FOLGA</button><button class="big gt" onclick="mAus()"><span class="bi">${ic('alert',26)}</span>INFORMAR AUSÊNCIA</button></div>
+ <div class="grid g2 mt"><div class="msg in" style="margin:0">${ic('sun',16)}<span><b>Folga:</b> pedido para hoje ou data futura. Só entra no calendário depois de aprovada pelo gestor.</span></div><div class="msg in" style="margin:0">${ic('alert',16)}<span><b>Ausência:</b> comunique uma falta de hoje ou de dia anterior. Comunicar não justifica automaticamente — o gestor classifica.</span></div></div>
+ <div class="sec"><h2>Minhas folgas</h2></div><div class="card" style="padding:6px"><div class="tw"><table class="tb"><thead><tr><th>Data</th><th>Justificativa</th><th>Observações</th><th>Situação</th><th>Resposta do gestor</th></tr></thead><tbody>
+ ${fs.map(f=>`<tr><td><b>${fD(f.data)}</b>${f.fech?'<br>'+chip('o','dia de fechamento'):''}</td><td>${esc(f.just)}</td><td>${esc(f.obs||'—')}</td><td>${stChip(f.status)}</td><td>${esc(f.resp||'—')}</td></tr>`).join('')||'<tr><td colspan="5" class="empty">Nenhuma folga solicitada</td></tr>'}</tbody></table></div></div>
+ <div class="sec"><h2>Minhas ausências informadas</h2></div><div class="card" style="padding:6px"><div class="tw"><table class="tb"><thead><tr><th>Data</th><th>Justificativa</th><th>Classificação</th><th>Resposta do gestor</th></tr></thead><tbody>
+ ${as.map(a=>`<tr><td><b>${fD(a.data)}</b></td><td>${esc(a.just)}</td><td>${stChip(a.status)}</td><td>${esc(a.resp||'—')}</td></tr>`).join('')||'<tr><td colspan="4" class="empty">Nenhuma ausência informada</td></tr>'}</tbody></table></div></div>`};
+function mFolga(){modal('Solicitar folga',`<label>Data da folga *</label><input type="date" id="fd" min="${hoje()}" onchange="avisoFolga()"><div id="fav"></div>
+ <label>Justificativa *</label><textarea id="fj" rows="3" placeholder="Motivo da solicitação"></textarea><label>Observações</label><textarea id="fo" rows="2"></textarea>`,
+ `<button class="btn" onclick="fecharM()">Cancelar</button><button class="btn pri" onclick="enviarFolga()">Enviar solicitação</button>`)}
+function avisoFolga(){const d=val('#fd');let t='';if(d&&tem(U.id,'fech',d))t='Você tem fechamento neste dia (12h–21h). Para não deixar o fechamento descoberto, solicite também uma troca de escala.';else if(d&&tem(U.id,'atend',d))t='Você tem atendimento neste dia. Avalie solicitar uma troca de escala.';$('#fav').innerHTML=t?`<div class="msg wa">${ic('alert',16)}<span>${t}</span></div>`:''}
+function enviarFolga(){const d=val('#fd'),j=val('#fj'),o=val('#fo'),c=me();
+ if(!d)return merr('Informe a data da folga.');if(d<hoje())return merr('A folga deve ser para hoje ou uma data futura.');if(!j)return merr('A justificativa é obrigatória.');
+ if(S.folgas.some(f=>f.cid===c.id&&f.data===d&&f.status!=='recusada'))return merr('Já existe uma solicitação de folga para esta data.');
+ S.folgas.unshift({id:uid(),cid:c.id,data:d,just:j,obs:o,status:'pendente',q:agora(),fech:tem(c.id,'fech',d)});
+ audit('Solicitação de folga',null,{consultor:c.nome,data:d});notif('gestor',`${c.nome} solicitou folga para ${fD(d)}.`,'g_sol:folgas');save();fecharM();toast('SOLICITAÇÃO ENVIADA! AGUARDANDO APROVAÇÃO.');render()}
+function mAus(){modal('Informar ausência',`<div class="msg wa" style="margin-top:6px">${ic('alert',16)}<span>Comunicar a ausência não a torna justificada. O gestor fará a classificação.</span></div>
+ <label>Data da ausência *</label><input type="date" id="xd" max="${hoje()}" value="${hoje()}"><label>Justificativa *</label><textarea id="xj" rows="3"></textarea>`,
+ `<button class="btn" onclick="fecharM()">Cancelar</button><button class="btn pri" onclick="enviarAus()">Informar ausência</button>`)}
+function enviarAus(){const d=val('#xd'),j=val('#xj'),c=me();
+ if(!d)return merr('Informe a data.');if(d>hoje())return merr('A ausência deve ser de hoje ou de data anterior. Para datas futuras, solicite folga.');if(!j)return merr('A justificativa é obrigatória.');
+ if(ausDia(c.id,d))return merr('Já existe uma ausência informada para esta data.');
+ S.ausencias.unshift({id:uid(),cid:c.id,data:d,just:j,status:'pendente',q:agora()});audit('Ausência informada',null,{consultor:c.nome,data:d});
+ notif('gestor',`${c.nome} informou ausência em ${fD(d)}.`,'g_sol:aus');save();fecharM();toast('AUSÊNCIA INFORMADA COM SUCESSO. AGUARDANDO ANÁLISE DO GESTOR.');render()}
+
+/* ----- trocas ----- */
+function pessoaConflito(cid,tipo,iso){const n=nomeDe(cid),c=cons(cid);if(!c||!c.ativo)return`${n} não está ativo.`;
+ if(tem(cid,tipo,iso))return`${n} já tem ${TIPOS[tipo].toLowerCase()} em ${fD(iso)}.`;
+ const f=folgaDia(cid,iso);if(f&&f.status==='aprovada')return`${n} está de folga em ${fD(iso)}.`;
+ const a=ausDia(cid,iso);if(a)return`${n} tem ausência informada em ${fD(iso)}.`;
+ if(tipo==='fech'&&tem(cid,'ext',iso))return`${n} tem agenda externa em ${fD(iso)} — conflita com o fechamento (12h–21h).`;
+ if(tipo==='ext'&&tem(cid,'fech',iso))return`${n} tem fechamento em ${fD(iso)} (12h–21h) — conflita com agenda externa.`;return null}
+function conflitoTroca(t,ign){if(!t.tipo||!t.data)return'Escolha o tipo e a data.';if(!t.sub)return'Escolha o colega substituto.';if(t.sub===t.cid)return'Escolha outro colega.';
+ if(t.data<hoje())return'A data já passou.';if(!tem(t.cid,t.tipo,t.data))return`${nomeDe(t.cid)} não tem ${TIPOS[t.tipo].toLowerCase()} em ${fD(t.data)}.`;
+ let x=pessoaConflito(t.sub,t.tipo,t.data);if(x)return x;
+ if(t.modo==='troca'){if(!t.data2)return'Escolha o dia do colega que você vai assumir.';if(t.data2===t.data)return'As datas devem ser diferentes.';if(t.data2<hoje())return'O dia do colega já passou.';
+  if(!tem(t.sub,t.tipo,t.data2))return`${nomeDe(t.sub)} não tem ${TIPOS[t.tipo].toLowerCase()} em ${fD(t.data2)}.`;x=pessoaConflito(t.cid,t.tipo,t.data2);if(x)return x}
+ if(S.trocas.some(o=>o.id!==ign&&['colega','gestor'].includes(o.status)&&o.tipo===t.tipo&&((o.cid===t.cid&&o.data===t.data)||(o.sub===t.sub&&o.data===t.data))))return'Já existe uma solicitação em andamento envolvendo este dia.';
+ return null}
+const datasDe=(cid,tipo,n=56)=>{const r=[];for(let i=0;i<n;i++){const d=addD(hoje(),i);if(tem(cid,tipo,d))r.push(d)}return r};
+VIEWS.troca=()=>{const c=me();TF.tipo=TF.tipo||'fech';TF.modo=TF.modo||'cobertura';const ds=datasDe(c.id,TF.tipo);if(!ds.includes(TF.data))TF.data=ds[0]||'';
+ const ops=ativos().filter(x=>x.id!==c.id);const d2=TF.sub&&TF.modo==='troca'?datasDe(TF.sub,TF.tipo):[];if(!d2.includes(TF.data2))TF.data2=d2[0]||'';
+ const err=TF.data&&TF.sub?conflitoTroca({...TF,cid:c.id}):null;
+ const rec=S.trocas.filter(t=>t.sub===c.id),mine=S.trocas.filter(t=>t.cid===c.id);
+ const desc=t=>`<b>${TIPOS[t.tipo]}</b> de ${fD(t.data)}${t.modo==='troca'?` ⇄ ${fD(t.data2)}`:' (cobertura)'}`;
+ return`<div class="card"><h2>Trocar minha escala</h2><p class="sub">Fechamento, atendimento ou agenda externa. O horário habitual não é alterado; o fechamento continua 12h–21h.</p>
+ <div class="steps"><div class="st"><b>1</b>Você solicita</div><div class="st"><b>2</b>Colega aceita ou recusa</div><div class="st"><b>3</b>Gestor aprova ou recusa</div><div class="st" style="background:var(--okb);color:var(--ok)">${ic('check',14,3)}Escala atualizada</div></div>
+ <div class="fl mt"><div><label>Tipo</label><select onchange="TF.tipo=this.value;TF.data='';render()">${Object.entries(TIPOS).map(([k,l])=>`<option value="${k}" ${TF.tipo===k?'selected':''}>${l}</option>`).join('')}</select></div>
+ <div><label>Meu dia</label><select onchange="TF.data=this.value;render()">${ds.length?ds.map(d=>`<option value="${d}" ${TF.data===d?'selected':''}>${cap(fDL(d))}</option>`).join(''):'<option value="">Nenhum previsto nas próximas 8 semanas</option>'}</select></div>
+ <div><label>Colega substituto</label><select onchange="TF.sub=this.value;render()"><option value="">Escolha…</option>${ops.map(x=>`<option value="${x.id}" ${TF.sub===x.id?'selected':''}>${esc(x.nome)}</option>`).join('')}</select></div></div>
+ <label>Modalidade</label><label class="chk"><input type="radio" name="md" ${TF.modo==='cobertura'?'checked':''} onchange="TF.modo='cobertura';render()"> Cobertura — o colega assume o meu dia</label><label class="chk"><input type="radio" name="md" ${TF.modo==='troca'?'checked':''} onchange="TF.modo='troca';render()"> Troca — eu assumo um dia do colega</label>
+ ${TF.modo==='troca'?`<label>Dia do colega que eu assumo</label><select onchange="TF.data2=this.value;render()">${TF.sub?(d2.length?d2.map(d=>`<option value="${d}" ${TF.data2===d?'selected':''}>${cap(fDL(d))}</option>`).join(''):'<option value="">O colega não tem esse tipo nas próximas semanas</option>'):'<option>Escolha o colega primeiro</option>'}</select>`:''}
+ <label>Justificativa *</label><textarea id="tm" rows="2" placeholder="Por que precisa trocar?" oninput="TF.mot=this.value">${esc(TF.mot||'')}</textarea>
+ ${err?`<div class="msg er">${ic('alert',18)}<span>${esc(err)}</span></div>`:TF.data&&TF.sub?`<div class="msg ok">${ic('check',18)}<span>Sem conflitos encontrados.</span></div>`:''}
+ <div class="row mt"><span class="sp"></span><button class="btn pri" ${err||!TF.data||!TF.sub?'disabled':''} onclick="enviarTroca()">${ic('swap',16)} ENVIAR SOLICITAÇÃO</button></div></div>
+ <div class="sec"><h2>Pedidos recebidos de colegas</h2></div><div class="card">${rec.length?rec.map(t=>`<div class="li"><div>${avatar(cons(t.cid),'sm')}</div><div class="lx"><b>${esc(nomeDe(t.cid))}</b> pede que você assuma: ${desc(t)}<br><span class="mut">${esc(t.mot||'')} · ${fDH(t.q)}</span></div><div class="row">${t.status==='colega'?`<button class="btn ok sm" onclick="respTroca('${t.id}',true)">${ic('check',14,3)} ACEITAR TROCA</button><button class="btn er sm" onclick="respTroca('${t.id}',false)">${ic('x',14,3)} RECUSAR TROCA</button>`:stChip(t.status)}</div></div>`).join(''):'<div class="empty">Nenhum pedido recebido</div>'}</div>
+ <div class="sec"><h2>Minhas solicitações de troca</h2></div><div class="card">${mine.length?mine.map(t=>`<div class="li"><div>${avatar(cons(t.sub),'sm')}</div><div class="lx">${desc(t)} com <b>${esc(nomeDe(t.sub))}</b><br><span class="mut">${fDH(t.q)}${t.resp?' · Gestor: '+esc(t.resp):''}</span></div><div class="row">${stChip(t.status)}${['colega','gestor'].includes(t.status)?`<button class="btn sm" onclick="cancTroca('${t.id}')">Cancelar</button>`:''}</div></div>`).join(''):'<div class="empty">Nenhuma solicitação</div>'}</div>`};
+function enviarTroca(){const c=me(),t={id:uid(),cid:c.id,tipo:TF.tipo,data:TF.data,sub:TF.sub,modo:TF.modo,data2:TF.modo==='troca'?TF.data2:null,mot:val('#tm'),status:'colega',q:agora(),hist:[[agora(),c.nome,'Solicitou']]};
+ if(!t.mot){toast('A justificativa é obrigatória.','er');return}const e=conflitoTroca(t);if(e){toast(e,'er');return}
+ S.trocas.unshift(t);audit('Solicitação de troca de escala',null,{consultor:c.nome,tipo:TIPOS[t.tipo],data:t.data,substituto:nomeDe(t.sub),modo:t.modo,dia_do_colega:t.data2||'—'});
+ notif(t.sub,`${c.nome} pediu para você assumir ${TIPOS[t.tipo].toLowerCase()} em ${fD(t.data)}.`,'troca');save();TF={tipo:TF.tipo};toast('Solicitação enviada ao colega.');render()}
+function respTroca(id,ok){const t=S.trocas.find(x=>x.id===id);if(!t||t.status!=='colega'||t.sub!==U.id)return;
+ if(ok){const e=conflitoTroca(t,t.id);if(e){toast(e,'er');return}t.status='gestor';notif('gestor',`Troca ${TIPOS[t.tipo].toLowerCase()} ${fD(t.data)}: ${nomeDe(t.cid)} → ${nomeDe(t.sub)} aguarda sua aprovação.`,'g_sol:trocas')}
+ else t.status='recusada_colega';
+ t.hist.push([agora(),nomeDe(U.id),ok?'Colega aceitou':'Colega recusou']);audit('Resposta do colega à troca',{status:'aguardando colega'},{status:ok?'aguardando gestor':'recusada pelo colega',solicitante:nomeDe(t.cid)});
+ notif(t.cid,`${nomeDe(t.sub)} ${ok?'aceitou':'recusou'} sua troca de ${fD(t.data)}.${ok?' Agora aguarda o gestor.':''}`,'troca');save();toast(ok?'Você aceitou. Agora a troca aguarda o gestor.':'Pedido recusado.');render()}
+function cancTroca(id){const t=S.trocas.find(x=>x.id===id);if(!t||!['colega','gestor'].includes(t.status))return;const a=t.status;t.status='cancelada';t.hist.push([agora(),nomeDe(U.id),'Cancelou']);audit('Troca cancelada pelo solicitante',{status:a},{status:'cancelada'});notif(t.sub,`${nomeDe(t.cid)} cancelou o pedido de troca de ${fD(t.data)}.`,'troca');save();render()}
+
+/* ----- agenda / calendário ----- */
+function calHTML(cid){const{y,m}=CALM,first=new Date(y,m,1),start=addD(isoD(first),-first.getDay());let h=DN.map(d=>`<div class="cw">${d}</div>`).join('');
+ for(let i=0;i<42;i++){const d=addD(start,i),dd=pD(d),tg=tagsDia(cid,d);
+  if(i>=35&&dd.getMonth()!==m)break;
+  h+=`<div class="cd ${dd.getMonth()!==m?'out':''} ${d===hoje()?'hj':''}" onclick="diaM('${cid}','${d}')"><span class="nn">${dd.getDate()}</span>${tg.map(t=>`<span class="tg ${t[0]}" title="${t[1]}">${t[1]}</span>`).join('')}</div>`}
+ return`<div class="calh"><button class="btn sm" onclick="mesNav(-1)" aria-label="Mês anterior">${ic('left',16)}</button><h2>${MES[m]} ${y}</h2><button class="btn sm" onclick="mesNav(1)" aria-label="Próximo mês">${ic('right',16)}</button><span class="sp"></span><button class="btn sm" onclick="mesNav(0)">Hoje</button></div><div class="cal">${h}</div>
+ <div class="leg"><span><i style="background:var(--or)"></i>Fechamento 12h–21h</span><span><i style="background:var(--at)"></i>Atendimento</span><span><i style="background:var(--ex)"></i>Agenda externa</span><span><i style="background:var(--gr)"></i>Sábado</span><span><i style="background:var(--ok)"></i>Folga / aprovado</span><span><i style="background:var(--wa2)"></i>Pendente</span><span><i style="background:var(--er)"></i>Não justificada</span></div>`}
+function mesNav(n){if(!n){const d=new Date();CALM={y:d.getFullYear(),m:d.getMonth()}}else{let m=CALM.m+n,y=CALM.y;if(m<0){m=11;y--}if(m>11){m=0;y++}CALM={y,m}}render()}
+VIEWS.agenda=()=>{const c=me();return`<div class="card">${calHTML(c.id)}</div><div class="sec"><h2>Minha semana</h2></div>${semanaHTML(c.id)}`};
+function diaM(cid,d){const c=cons(cid),p=plano(cid,d),tg=tagsDia(cid,d),r=reg(cid,d)||{},a=apurar(cid,d),ex=S.externas.filter(e=>e.cid===cid&&e.data===d),f=folgaDia(cid,d),au=ausDia(cid,d),tp=trocasPend(cid,d);
+ const podeExt=(U.tipo==='gestor'||U.id===cid)&&(tem(cid,'ext',d)||U.tipo==='gestor');
+ modal(`${esc(c.nome)} · ${cap(fDL(d))}`,`<dl class="kv mt"><dt>Horário planejado</dt><dd><b>${planoTxt(p)}</b></dd>
+ <dt>Escala do dia</dt><dd>${tg.length?tg.map(t=>chip(t[0]==='o'?'o':t[0],t[1])).join(' '):'<span class="mut">Nada previsto</span>'}</dd>
+ <dt>Ponto</dt><dd>${r.ent?`${r.ent}${r.ii?' · intervalo '+r.ii+'–'+(r.if||'…'):''} · ${r.sai||'sem saída'}`:'Sem registro'} ${U.tipo==='gestor'&&a.txt?'<br>'+chip(a.cls,a.txt):''}</dd>
+ ${f?`<dt>Folga</dt><dd>${stChip(f.status)} ${esc(f.just)}${f.resp?'<br><span class="mut">Gestor: '+esc(f.resp)+'</span>':''}</dd>`:''}
+ ${au?`<dt>Ausência</dt><dd>${stChip(au.status)} ${esc(au.just)}</dd>`:''}
+ ${tp.length?`<dt>Trocas pendentes</dt><dd>${tp.map(t=>`${TIPOS[t.tipo]}: ${esc(nomeDe(t.cid))} → ${esc(nomeDe(t.sub))} ${stChip(t.status)}`).join('<br>')}</dd>`:''}
+ ${tem(cid,'ext',d)||ex.length?`<dt>Agenda externa</dt><dd>${ex.length?ex.map(e=>`<b>${esc(e.hora||'')}</b> ${esc(e.local||'')} — ${esc(e.obj||'')} ${chip(e.sit==='Realizada'?'g':e.sit==='Cancelada'?'r':'y',e.sit)}${e.obs?'<br><span class="mut">'+esc(e.obs)+'</span>':''}`).join('<br>'):'<span class="mut">Sem detalhes cadastrados</span>'}</dd>`:''}</dl>`,
+ `${podeExt?`<button class="btn" onclick="mExt('${cid}','${d}')">${ic('pin',15)} Detalhar agenda externa</button>`:''}<button class="btn pri" onclick="fecharM()">Fechar</button>`)}
+function mExt(cid,d,id){const e=id?S.externas.find(x=>x.id===id):{};const g=U.tipo==='gestor';
+ modal(id?'Editar agenda externa':'Agenda externa',`<div class="fl mt"><div><label>Consultor</label>${g?`<select id="ec">${ativos().map(c=>`<option value="${c.id}" ${(e.cid||cid)===c.id?'selected':''}>${esc(c.nome)}</option>`).join('')}</select>`:`<input disabled value="${esc(me().nome)}"><input type="hidden" id="ec" value="${U.id}">`}</div><div><label>Data *</label><input type="date" id="edt" value="${e.data||d||hoje()}"></div><div><label>Horário *</label><input type="time" id="eh" value="${e.hora||''}"></div></div>
+ <label>Local *</label><input id="el" value="${esc(e.local||'')}" placeholder="Escola, empresa, evento…"><label>Objetivo *</label><input id="eo" value="${esc(e.obj||'')}"><label>Observações</label><textarea id="eob" rows="2">${esc(e.obs||'')}</textarea>
+ <label>Situação</label><select id="es">${['Planejada','Realizada','Cancelada'].map(s=>`<option ${e.sit===s?'selected':''}>${s}</option>`).join('')}</select>`,
+ `<button class="btn" onclick="fecharM()">Cancelar</button><button class="btn pri" onclick="salvarExt('${id||''}')">Salvar</button>`)}
+function salvarExt(id){const o={cid:val('#ec'),data:val('#edt'),hora:val('#eh'),local:val('#el'),obj:val('#eo'),obs:val('#eob'),sit:val('#es')};
+ if(!o.data||!o.hora||!o.local||!o.obj)return merr('Preencha data, horário, local e objetivo.');
+ if(tem(o.cid,'fech',o.data)){const m=t2m(o.hora);if(m>=t2m('12:00')&&m<t2m('21:00'))return merr(`${nomeDe(o.cid)} tem fechamento neste dia (12h–21h). Escolha outro horário ou solicite troca.`)}
+ if(S.externas.some(x=>x.id!==id&&x.cid===o.cid&&x.data===o.data&&x.hora===o.hora))return merr('Já existe uma agenda externa neste dia e horário.');
+ if(id){const e=S.externas.find(x=>x.id===id);audit('Agenda externa alterada',{...e},o);Object.assign(e,o)}else{S.externas.unshift({id:uid(),...o,por:nomeU(),q:agora()});audit('Agenda externa cadastrada',null,{consultor:nomeDe(o.cid),...o,cid:undefined})}
+ if(U.tipo==='gestor'&&o.cid)notif(o.cid,`Agenda externa em ${fD(o.data)} às ${o.hora}: ${o.local}.`,'agenda');save();fecharM();toast('Agenda externa salva.');render()}
+
+/* ----- alinhamentos, notificações, perfil ----- */
+VIEWS.alinh=()=>{const l=S.alinh;return`<div class="card"><h2>Alinhamentos da equipe</h2><p class="sub">Leia e confirme a leitura de cada alinhamento.</p>
+ ${l.length?l.map(a=>{const lido=a.leit[U.id];return`<div class="li ${lido?'':'unr'}"><div class="lx"><h3>${esc(a.tit)}</h3><p class="mut">${a.cat?esc(a.cat)+' · ':''}${GESTOR.nome} · ${fDH(a.q)}</p><p style="margin-top:8px;white-space:pre-wrap">${esc(a.txt)}</p></div><div>${lido?chip('g','Leitura confirmada '+fDH(lido),'check'):`<button class="btn pri" onclick="confLeit('${a.id}')">${ic('check',15,3)} Confirmar leitura</button>`}</div></div>`}).join(''):'<div class="empty">Nenhum alinhamento publicado</div>'}</div>`};
+function confLeit(id){const a=S.alinh.find(x=>x.id===id);if(!a||a.leit[U.id])return;a.leit[U.id]=agora();audit('Leitura de alinhamento confirmada',null,{consultor:me().nome,alinhamento:a.tit});save();toast('Leitura confirmada.');render()}
+VIEWS.notif=()=>{const l=minhasNotifs();return`<div class="card"><div class="row"><h2>Notificações</h2><span class="sp"></span>${l.some(n=>!n.lida)?`<button class="btn sm" onclick="lerTodas()">Marcar todas como lidas</button>`:''}</div>
+ ${l.length?l.map(n=>`<div class="li ${n.lida?'':'unr'}" style="cursor:pointer" onclick="abrirN('${n.id}')"><div class="ch3" style="margin:0"><div class="ci">${ic('bell',17)}</div></div><div class="lx"><b style="font-weight:${n.lida?500:700}">${esc(n.txt)}</b><br><span class="mut">${fDH(n.q)}</span></div>${n.lida?chip('n','Lida'):chip('o','Nova')}</div>`).join(''):'<div class="empty">Sem notificações</div>'}</div>`};
+function abrirN(id){const n=S.notifs.find(x=>x.id===id);if(!n)return;n.lida=true;save();n.ir?go(n.ir):render()}
+function lerTodas(){minhasNotifs().forEach(n=>n.lida=true);save();render()}
+const dTxt=v=>v==='pend'?'Pendente de confirmação':v==null?'Nenhum':DL[v];
+const extTxt=c=>c.ext==='pend'?'Não informado':Array.isArray(c.ext)&&c.ext.length?c.ext.map(d=>DN[d]).join(' e '):'Nenhuma';
+VIEWS.perfil=()=>{const c=me(),d=S.dispositivos.filter(x=>x.cid===c.id);return`<div class="grid g2"><div class="card" style="text-align:center"><div class="avw" style="display:inline-block" onclick="escolherFoto()">${avatar(c,'lg')}<button class="cam" aria-label="Alterar foto">${ic('cam',16)}</button></div>
+ <h2 class="mt">${esc(nomeComp(c))}</h2><p class="sub">Consultor de Carreiras${c.apelido?` · chamado(a) de <b>${esc(c.apelido)}</b>`:''}</p>
+ <div class="row" style="justify-content:center;margin-top:10px"><button class="btn sm" onclick="mNome()">${ic('edit',14)} Alterar meu nome</button></div>
+ <div class="row mt" style="justify-content:center"><button class="btn pri" onclick="escolherFoto()">${ic('cam',16)} ${c.foto?'Trocar foto':'Enviar foto'}</button>${c.fotoSrc?`<button class="btn" onclick="ajustarFoto()">${ic('edit',15)} Ajustar enquadramento</button>`:''}${c.foto?`<button class="btn" onclick="semFoto()">Remover</button>`:''}</div>
+ <p class="mut mt">${c.foto?'Foto salva na sua conta'+(c.fotoEm?' em '+fDH(c.fotoEm):'')+'.':'Sem foto, o app mostra suas iniciais.'} Ela aparece para você e para o gestor.</p></div>
+ <div class="card"><h2>Minha escala fixa</h2><dl class="kv mt"><dt>Horário habitual</dt><dd>${c.ini==='pend'?'Pendente de confirmação':c.ini+' – '+c.fim}</dd><dt>Fechamento</dt><dd>${dTxt(c.fech)}${c.fech!=null&&c.fech!=='pend'?' · 12h–21h':''}</dd><dt>Atendimento</dt><dd>${dTxt(c.atend)}</dd><dt>Agenda externa</dt><dd>${extTxt(c)}${c.extObs?' <span class="mut">('+esc(c.extObs)+')</span>':''}</dd><dt>E-mail</dt><dd>${esc(c.email||'A cadastrar pelo gestor')}</dd></dl>
+ <p class="mut mt">Alterações de escala são feitas pelo gestor ou por troca aprovada.</p></div></div>
+ <div class="sec"><h2>Meus dispositivos</h2></div><div class="card">${d.map(x=>`<div class="li"><div class="ch3" style="margin:0"><div class="ci">${ic('mon',17)}</div></div><div class="lx"><b>${esc(x.label)}</b> <span class="mut">${esc(x.dev.slice(-6))}${x.dev===DEV?' · este navegador':''}</span><br><span class="mut">Solicitado em ${fDH(x.q)}</span></div>${stChip(x.status)}</div>`).join('')}
+ <div class="msg in">${ic('shield',16)}<span>Um dispositivo autorizado por vez. A autorização identifica o navegador e não comprova presença física.</span></div></div>`};
+/* ----- foto de perfil: envio + enquadramento ----- */
+let FE=null;
+function escolherFoto(){const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=()=>{const f=i.files[0];if(!f)return;if(!/^image\//.test(f.type))return toast('Escolha um arquivo de imagem (JPG ou PNG).','er');if(f.size>15e6)return toast('Imagem muito grande (máx. 15 MB).','er');
+ const rd=new FileReader();rd.onload=()=>{const im=new Image();im.onload=()=>{const M=900,k=Math.min(1,M/Math.max(im.width,im.height)),cv=document.createElement('canvas');cv.width=Math.round(im.width*k);cv.height=Math.round(im.height*k);cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);abrirEditor(cv.toDataURL('image/jpeg',.88),{z:1,x:0,y:0})};im.onerror=()=>toast('Não foi possível ler a imagem.','er');im.src=rd.result};rd.readAsDataURL(f)};i.click()}
+function ajustarFoto(){const c=me();if(c.fotoSrc)abrirEditor(c.fotoSrc,c.fotoAj||{z:1,x:0,y:0})}
+function abrirEditor(src,aj){const im=new Image();im.onload=()=>{FE={im,src,...aj};
+ modal('Ajustar foto de perfil',`<p class="sub mt" style="text-align:center">Arraste para posicionar e use o controle para aproximar.</p><div class="crop" id="crop"><canvas id="cropc" width="520" height="520"></canvas></div>
+ <div class="row" style="max-width:300px;margin:10px auto 0">${ic('user',14)}<input type="range" id="cz" min="1" max="3" step="0.01" value="${FE.z}" style="flex:1" oninput="FE.z=+this.value;desenhaFE()">${ic('user',20)}</div>
+ <div class="row" style="justify-content:center;margin-top:10px"><button class="btn sm" onclick="FE.z=1;FE.x=0;FE.y=0;document.getElementById('cz').value=1;desenhaFE()">Centralizar</button><button class="btn sm" onclick="fecharM();escolherFoto()">Escolher outra foto</button></div>`,
+ `<button class="btn" onclick="fecharM()">Cancelar</button><button class="btn pri" onclick="salvarFoto()">${ic('check',15,3)} Salvar foto</button>`);
+ const el=$('#crop');let st=null;el.onpointerdown=e=>{st={x:e.clientX,y:e.clientY,fx:FE.x,fy:FE.y};el.setPointerCapture(e.pointerId)};
+ el.onpointermove=e=>{if(!st)return;const r=el.getBoundingClientRect(),k=520/r.width;FE.x=st.fx+(e.clientX-st.x)*k;FE.y=st.fy+(e.clientY-st.y)*k;desenhaFE()};el.onpointerup=el.onpointercancel=()=>{st=null};
+ el.onwheel=e=>{e.preventDefault();FE.z=Math.min(3,Math.max(1,FE.z-e.deltaY*.0015));$('#cz').value=FE.z;desenhaFE()};desenhaFE()};im.src=src}
+function geoFE(S0){const{im,z}=FE,b=S0*Math.max(1,1)/Math.min(im.width,im.height)*z,w=im.width*b,h=im.height*b,k=S0/520,mx=Math.max(0,(w-S0)/2),my=Math.max(0,(h-S0)/2);
+ FE.x=Math.max(-mx/k,Math.min(mx/k,FE.x));FE.y=Math.max(-my/k,Math.min(my/k,FE.y));return{w,h,x:(S0-w)/2+FE.x*k,y:(S0-h)/2+FE.y*k}}
+function desenhaFE(){const cv=$('#cropc');if(!cv||!FE)return;const g=geoFE(520),x=cv.getContext('2d');x.clearRect(0,0,520,520);x.drawImage(FE.im,g.x,g.y,g.w,g.h)}
+function salvarFoto(){const c=me(),S0=320,cv=document.createElement('canvas');cv.width=cv.height=S0;const g=geoFE(S0),x=cv.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,S0,S0);x.drawImage(FE.im,g.x,g.y,g.w,g.h);
+ const antes=c.foto?'foto anterior':'sem foto';c.foto=cv.toDataURL('image/jpeg',.86);c.fotoSrc=FE.src;c.fotoAj={z:FE.z,x:FE.x,y:FE.y};c.fotoEm=agora();c.fotoPulou=true;
+ audit('Foto de perfil atualizada',{foto:antes},{consultor:c.nome,foto:'nova foto'});save();FE=null;fecharM();toast('Foto salva no seu perfil!');render()}
+function boasVindasFoto(){const c=me();if(!c||c.foto||$('#ov').classList.contains('on'))return;
+ modal(`Bem-vindo(a), ${esc(chamado(c))}!`,`<div style="text-align:center"><div style="display:inline-block;margin-top:14px">${avatar(c,'lg')}</div><h3 class="mt">Personalize seu espaço</h3><p class="sub" style="margin-top:6px">Envie uma foto de perfil. Ela aparece no seu início e para o gestor, ao lado do seu nome. Enquanto não houver foto, usamos suas iniciais.</p></div>`,
+ `<button class="btn" onclick="c0Pular()">Agora não</button><button class="btn pri" onclick="fecharM();escolherFoto()">${ic('cam',16)} Enviar minha foto</button>`)}
+function mNome(){const c=me();modal('Alterar meu nome',`<label>Nome completo</label><input id="nnc" value="${esc(c.nomeCompleto||'')}" placeholder="${esc(c.nome)}" maxlength="80">
+ <label>Como prefere ser chamado(a)</label><input id="nap" value="${esc(c.apelido||'')}" placeholder="${esc(c.nome)}" maxlength="30"><p class="mut" style="margin-top:6px">Aparece no "Olá" da tela inicial. Em branco, usamos "${esc(c.nome)}".</p>`,
+ `<button class="btn" onclick="fecharM()">Cancelar</button><button class="btn pri" onclick="salvarNome()">${ic('check',15,3)} Salvar</button>`)}
+function salvarNome(){const c=me(),nc=val('#nnc').replace(/\s+/g,' '),ap=val('#nap').replace(/\s+/g,' ');if(nc&&nc.length<3)return merr('Nome completo muito curto.');
+ const antes={nome_completo:c.nomeCompleto||'—',chamado:c.apelido||'—'};c.nomeCompleto=nc;c.apelido=ap;audit('Nome alterado pelo consultor',antes,{consultor:c.nome,nome_completo:nc||'—',chamado:ap||'—'});
+ notif('gestor',`${c.nome} alterou o nome de exibição para "${chamado(c)}"${nc?' ('+nc+')':''}.`,'g_equipe');save();fecharM();toast('Nome atualizado!');render()}
+function c0Pular(){const c=me();c.fotoPulou=true;save();fecharM();toast('Você pode enviar a foto depois em Meu perfil.')}
+function semFoto(){const c=me();c.fotoSrc=null;c.fotoAj=null;c.foto=null;audit('Foto de perfil removida',null,{consultor:me().nome});save();render()}
+
+/* ===================== GESTOR ===================== */
+const pendFolgas=()=>S.folgas.filter(f=>f.status==='pendente');
+function kpis(){const h=hoje(),s=segunda(h),at=ativos();let fs=0;for(let i=0;i<7;i++){const d=addD(s,i);at.forEach(c=>{if(tem(c.id,'fech',d))fs++})}
+ let inc=0;for(let i=1;i<=30;i++){const d=addD(h,-i);at.forEach(c=>{if(apurar(c.id,d).k==='inc')inc++})}
+ return{tot:at.length,pres:at.filter(c=>(reg(c.id,h)||{}).ent).length,atr:at.filter(c=>apurar(c.id,h).fl.includes('atraso')).length,fs,
+  fp:pendFolgas().length,aus:S.ausencias.filter(a=>a.status==='pendente').length,tr:S.trocas.filter(t=>t.status==='gestor').length,inc}}
+VIEWS.g_inicio=()=>{const k=kpis(),h=hoje(),at=ativos();
+ const K=[['o','users','Total de consultores',k.tot,'g_equipe'],['g','check','Presenças hoje',k.pres,'g_ponto'],['r','clock','Atrasos hoje',k.atr,'g_ponto'],['o','star','Fechamentos da semana',k.fs,'g_fech'],
+  ['y','sun','Folgas pendentes',k.fp,'g_sol:folgas'],['y','alert','Ausências a classificar',k.aus,'g_sol:aus'],['y','swap','Trocas aguardando',k.tr,'g_sol:trocas'],['r','file','Registros incompletos',k.inc,'g_ponto']];
+ const fh=at.filter(c=>tem(c.id,'fech',h));
+ const pend=[['Dispositivos aguardando autorização',S.dispositivos.filter(d=>d.status==='pendente').length,'g_sol:disp'],['Ajustes de ponto pendentes',S.ajustes.filter(a=>a.status==='pendente').length,'g_sol:ajustes'],['Trocas aguardando colega',S.trocas.filter(t=>t.status==='colega').length,'g_sol:trocas'],['Consultores com escala pendente',at.filter(c=>[c.fech,c.atend,c.ext,c.ini].includes('pend')).length,'g_equipe']];
+ return`<div class="grid g4">${K.map(x=>`<div class="card hov kpi ${x[0]}" onclick="go('${x[4]}')"><span class="kb">${ic(x[1],19)}</span><span class="kl">${x[2]}</span><b>${x[3]}</b></div>`).join('')}</div>
+ <div class="grid g21 mt2"><div class="card" style="padding:14px 6px 6px"><div class="row" style="padding:0 12px 6px"><h2>Hoje na equipe</h2><span class="sp"></span><button class="btn sm" onclick="go('g_ponto')">Ver ponto</button></div><div class="tw"><table class="tb"><thead><tr><th>Consultor</th><th>Planejado</th><th>Entrada</th><th>Saída</th><th>Situação</th></tr></thead><tbody>
+ ${at.map(c=>{const r=reg(c.id,h)||{},a=apurar(c.id,h);return`<tr><td><div class="who">${avatar(c,'sm')}${esc(c.nome)}</div></td><td>${planoTxt(plano(c.id,h))}</td><td>${r.ent||'—'}</td><td>${r.sai||'—'}</td><td>${chip(a.cls,a.txt||'—')}</td></tr>`}).join('')}</tbody></table></div></div>
+ <div class="grid" style="align-content:start"><div class="card"><h2>Fechamento de hoje</h2><p class="sub">12h às 21h</p><div class="mt">${fh.length?fh.map(c=>`<div class="who" style="margin:8px 0">${avatar(c,'sm')}${esc(c.nome)}</div>`).join(''):'<p class="mut">Sem fechamento hoje</p>'}</div></div>
+ <div class="card"><h2>Outras pendências</h2>${pend.map(p=>`<div class="li" style="cursor:pointer;padding:10px 0" onclick="go('${p[2]}')"><div class="lx">${p[0]}</div>${chip(p[1]?'y':'n',String(p[1]))}</div>`).join('')}</div></div></div>`};
+
+/* ----- ponto da equipe ----- */
+function periodo(p){const h=hoje();if(p==='hoje'){PF.de=PF.ate=h}if(p==='sem'){PF.de=segunda(h);PF.ate=addD(PF.de,6)}if(p==='mes'){PF.de=h.slice(0,8)+'01';const d=pD(h);PF.ate=isoD(new Date(d.getFullYear(),d.getMonth()+1,0))}render()}
+const hh=t=>t?t:'—';
+VIEWS.g_ponto=()=>{const h=hoje();PF.de=PF.de||segunda(h);PF.ate=PF.ate||h;PF.c=PF.c||'';PF.s=PF.s||'';
+ const rows=[],res={};let d=PF.de,n=0;while(d<=PF.ate&&n<62){ativos().forEach(c=>{if(PF.c&&c.id!==PF.c)return;const p=plano(c.id,d),r=reg(c.id,d),a=apurar(c.id,d);if(!p&&!r&&!ausDia(c.id,d))return;
+   const z=res[c.id]=res[c.id]||{c,dias:0,atr:0,ant:0,adi:0,saldo:0,nat:0,inc:0,aus:0};if(d<=h&&p&&!p.folga&&!p.pend)z.dias++;z.atr+=a.atr||0;z.ant+=a.ant||0;z.adi+=a.adi||0;z.saldo+=a.saldo||0;if(a.fl.includes('atraso'))z.nat++;if(a.k==='inc')z.inc++;if(a.k==='aus'||a.k==='poss')z.aus++;
+   if(PF.s&&!(a.fl.includes(PF.s)))return;rows.push([c,d,p,r||{},a])});d=addD(d,1);n++}
+ const sit=[['','Todas'],['pont','Pontual'],['atraso','Atraso'],['antec','Saída antecipada'],['adic','Tempo adicional'],['inc','Registro incompleto'],['aus','Ausência informada'],['poss','Possível ausência (sem registro)']];
+ const pv=p=>p&&p.ini?p:null;
+ return`<div class="card"><div class="row" style="margin-bottom:12px"><button class="btn sm" onclick="periodo('hoje')">Hoje</button><button class="btn sm" onclick="periodo('sem')">Esta semana</button><button class="btn sm" onclick="periodo('mes')">Este mês</button></div>
+ <div class="fl"><div><label>Consultor</label><select onchange="PF.c=this.value;render()"><option value="">Todos</option>${ativos().map(c=>`<option value="${c.id}" ${PF.c===c.id?'selected':''}>${esc(c.nome)}</option>`).join('')}</select></div>
+ <div><label>De</label><input type="date" value="${PF.de}" onchange="PF.de=this.value;render()"></div><div><label>Até</label><input type="date" value="${PF.ate}" onchange="PF.ate=this.value;render()"></div>
+ <div><label>Situação</label><select onchange="PF.s=this.value;render()">${sit.map(s=>`<option value="${s[0]}" ${PF.s===s[0]?'selected':''}>${s[1]}</option>`).join('')}</select></div></div>
+ <p class="mut" style="margin-top:10px">Tolerância art. 58 §1º CLT (5 min por marcação, até 10 min/dia). "Possível ausência" apenas sinaliza falta de registro — não classifica a ausência. Sem compensação automática.</p></div>
+ <div class="sec"><h2>Diferenças por consultor no período</h2></div>
+ <div class="card" style="padding:6px"><div class="tw"><table class="tb"><thead><tr><th>Consultor</th><th>Dias previstos</th><th>Atrasos</th><th>Saídas antecipadas</th><th>Tempo adicional</th><th>Incompletos</th><th>Sem registro / ausência</th><th>Diferença acumulada</th></tr></thead><tbody>
+ ${Object.values(res).map(z=>`<tr><td><div class="who">${avatar(z.c,'sm')}${esc(z.c.nome)}</div></td><td>${z.dias}</td><td>${z.nat?chip('r',z.nat+'× · '+z.atr+' min'):'—'}</td><td>${z.ant?chip('r',z.ant+' min'):'—'}</td><td>${z.adi?chip('y',z.adi+' min'):'—'}</td><td>${z.inc?chip('y',String(z.inc)):'—'}</td><td>${z.aus?chip('r',String(z.aus)):'—'}</td><td><b style="color:${z.saldo<0?'var(--er)':z.saldo>0?'var(--ok)':'inherit'}">${z.saldo?m2h(z.saldo):'0h00'}</b></td></tr>`).join('')||'<tr><td colspan="8" class="empty">Sem dados no período</td></tr>'}</tbody></table></div></div>
+ <div class="sec"><h2>Registros por dia</h2></div>
+ <div class="card" style="padding:6px"><div class="tw"><table class="tb"><thead><tr><th>Consultor</th><th>Data</th><th>Entrada prevista</th><th>Entrada real</th><th>Saída prevista</th><th>Saída real</th><th>Intervalo</th><th>Situação</th><th>Diferença</th></tr></thead><tbody>
+ ${rows.map(([c,d,p,r,a])=>`<tr style="cursor:pointer" onclick="diaM('${c.id}','${d}')"><td><div class="who">${avatar(c,'sm')}${esc(c.nome)}</div></td><td>${fD(d)}${p&&p.fech?'<br>'+chip('o','fechamento'):''}</td><td>${pv(p)?p.ini:planoTxt(p)}</td><td>${hh(r.ent)}</td><td>${pv(p)?p.fim:'—'}</td><td>${hh(r.sai)}${r.aj?' '+chip('b','ajustado'):''}</td><td>${r.ii?r.ii+' – '+(r.if||'…'):'—'}</td><td>${chip(a.cls,a.txt||'—')}</td><td>${a.saldo?m2h(a.saldo):'—'}</td></tr>`).join('')||'<tr><td colspan="9" class="empty">Nenhum registro no filtro</td></tr>'}
+ </tbody></table></div></div>`};
+
+/* ----- central de solicitações ----- */
+VIEWS.g_sol=()=>{const T=[['folgas','Folgas',pendFolgas().length],['aus','Ausências',S.ausencias.filter(a=>a.status==='pendente').length],['trocas','Trocas',S.trocas.filter(t=>t.status==='gestor').length],['ajustes','Ajustes de ponto',S.ajustes.filter(a=>a.status==='pendente').length],['disp','Autorizações de dispositivos',S.dispositivos.filter(d=>d.status==='pendente').length]];
+ if(!T.some(t=>t[0]===TAB))TAB='folgas';
+ const ord=l=>[...l].sort((a,b)=>(['pendente','gestor'].includes(b.status)?1:0)-(['pendente','gestor'].includes(a.status)?1:0));
+ const quem=cid=>`<div class="who">${avatar(cons(cid),'sm')}${esc(nomeDe(cid))}</div>`;
+ const bts=(tp,id)=>`<button class="btn ok sm" onclick="decidir('${tp}','${id}','aprovar')">${ic('check',14,3)} ${tp==='trocas'?'APROVAR TROCA':'Aprovar'}</button><button class="btn er sm" onclick="decidir('${tp}','${id}','recusar')">${ic('x',14,3)} ${tp==='trocas'?'RECUSAR TROCA':'Recusar'}</button>`;
+ let b='';
+ if(TAB==='folgas')b=ord(S.folgas).map(f=>`<div class="li">${quem(f.cid)}<div class="lx"><b>${cap(fDL(f.data))}</b> ${tem(f.cid,'fech',f.data)?chip('o','dia de fechamento — verifique cobertura','alert'):''}<br>${esc(f.just)}${f.obs?`<br><span class="mut">Obs.: ${esc(f.obs)}</span>`:''}<br><span class="mut">Solicitado em ${fDH(f.q)}${f.resp?' · Resposta: '+esc(f.resp):''}</span></div><div class="row">${f.status==='pendente'?bts('folgas',f.id):stChip(f.status)}</div></div>`).join('');
+ if(TAB==='aus')b=ord(S.ausencias).map(a=>`<div class="li">${quem(a.cid)}<div class="lx"><b>${cap(fDL(a.data))}</b><br>${esc(a.just)}<br><span class="mut">Informado em ${fDH(a.q)}${a.resp?' · Resposta: '+esc(a.resp):''}</span></div><div class="row">${stChip(a.status)}<button class="btn ok sm" onclick="decidir('aus','${a.id}','justificada')">Justificada</button><button class="btn er sm" onclick="decidir('aus','${a.id}','nao_justificada')">Não justificada</button>${a.status!=='pendente'?`<button class="btn sm" onclick="decidir('aus','${a.id}','pendente')">Pendente</button>`:''}</div></div>`).join('');
+ if(TAB==='trocas')b=ord(S.trocas).map(t=>{const e=t.status==='gestor'?conflitoTroca(t,t.id):null;return`<div class="li">${quem(t.cid)}<div class="lx"><b>${TIPOS[t.tipo]}</b> de ${cap(fDL(t.data))} → <b>${esc(nomeDe(t.sub))}</b>${t.modo==='troca'?` · em troca, ${esc(nomeDe(t.cid))} assume ${fD(t.data2)}`:' · cobertura'}${t.mot?`<br>Justificativa: ${esc(t.mot)}`:''}<br>${(()=>{const h=t.hist.find(x=>/aceitou/.test(x[2]));return h?chip('g','Substituto aceitou em '+fDH(h[0]),'check'):t.hist.some(x=>/recusou/.test(x[2]))?chip('r','Substituto recusou'):chip('y','Aguardando aceite do substituto')})()}<br><span class="mut">${t.hist.map(h=>fDH(h[0])+' '+esc(h[1])+': '+h[2]).join(' · ')}</span>${e?`<div class="msg er">${ic('alert',16)}<span>Conflito atual: ${esc(e)}</span></div>`:''}</div><div class="row">${t.status==='gestor'?bts('trocas',t.id):stChip(t.status)}</div></div>`}).join('');
+ if(TAB==='ajustes')b=ord(S.ajustes).map(a=>`<div class="li">${quem(a.cid)}<div class="lx"><b>${cap(fDL(a.data))}</b> · ${MARC.find(m=>m[0]===a.campo)[1]}: ${a.atual?`<s>${a.atual}</s> → `:''}<b>${a.hora}</b><br>${esc(a.just)}<br><span class="mut">${fDH(a.q)}${a.resp?' · Resposta: '+esc(a.resp):''}</span></div><div class="row">${a.status==='pendente'?bts('ajustes',a.id):stChip(a.status)}</div></div>`).join('');
+ if(TAB==='disp')b=ord(S.dispositivos).map(d=>{const ant=S.dispositivos.find(x=>x.cid===d.cid&&x.status==='autorizado'&&x.id!==d.id);return`<div class="li">${quem(d.cid)}<div class="lx"><b>${esc(d.label)}</b> <span class="mut">${esc(d.dev.slice(-6))}</span><br><span class="mut">Solicitado em ${fDH(d.q)}</span>${d.status==='pendente'&&ant?`<br>${chip('y','Ao autorizar, o dispositivo atual ('+ant.label+') será revogado')}`:''}</div><div class="row">${d.status==='pendente'?bts('disp',d.id):d.status==='autorizado'?stChip('autorizado')+`<button class="btn sm" onclick="decidir('disp','${d.id}','revogar')">Revogar</button>`:stChip(d.status)}</div></div>`}).join('');
+ return`<div class="tabs">${T.map(t=>`<button class="tab ${TAB===t[0]?'on':''}" onclick="TAB='${t[0]}';render()">${t[1]}${t[2]?`<span class="bd">${t[2]}</span>`:''}</button>`).join('')}</div><div class="card">${b||'<div class="empty">Nada por aqui</div>'}</div>`};
+function decidir(tp,id,ac){const L={folgas:S.folgas,aus:S.ausencias,trocas:S.trocas,ajustes:S.ajustes,disp:S.dispositivos}[tp],o=L.find(x=>x.id===id);if(!o)return;
+ const tit={aprovar:'Aprovar',recusar:'Recusar',justificada:'Classificar como justificada',nao_justificada:'Classificar como não justificada',pendente:'Voltar para pendente',revogar:'Revogar dispositivo'}[ac];
+ const obr=['recusar','nao_justificada','revogar'].includes(ac);
+ modal(`${tit} · ${esc(nomeDe(o.cid))}`,`<p class="sub mt">${tp==='disp'?esc(o.label):o.data?cap(fDL(o.data)):''}</p><label>Resposta ao consultor ${obr?'*':'(opcional)'}</label><textarea id="rr" rows="3">${esc(o.resp||'')}</textarea>`,
+ `<button class="btn" onclick="fecharM()">Cancelar</button><button class="btn ${['recusar','nao_justificada','revogar'].includes(ac)?'er':'ok'}" onclick="confDec('${tp}','${id}','${ac}')">Confirmar</button>`)}
+function confDec(tp,id,ac){const r=val('#rr');if(['recusar','nao_justificada','revogar'].includes(ac)&&!r)return merr('Escreva uma resposta ao consultor.');
+ if(tp==='folgas'){const f=S.folgas.find(x=>x.id===id);if(f.status!=='pendente')return merr('Esta solicitação já foi decidida.');f.status=ac==='aprovar'?'aprovada':'recusada';f.resp=r;f.dec=agora();
+  audit('Folga '+(ac==='aprovar'?'aprovada':'recusada'),{status:'pendente'},{consultor:nomeDe(f.cid),data:f.data,status:f.status,resposta:r});notif(f.cid,`Sua folga de ${fD(f.data)} foi ${f.status}.${r?' '+r:''}`,'folgas')}
+ if(tp==='aus'){const a=S.ausencias.find(x=>x.id===id),ant=a.status;a.status=ac;a.resp=r;a.dec=agora();audit('Ausência classificada',{status:ant},{consultor:nomeDe(a.cid),data:a.data,status:ac,resposta:r});
+  notif(a.cid,`Sua ausência de ${fD(a.data)} foi classificada como ${ac==='justificada'?'justificada':ac==='nao_justificada'?'não justificada':'pendente'}.${r?' '+r:''}`,'folgas')}
+ if(tp==='trocas'){const t=S.trocas.find(x=>x.id===id);if(t.status!=='gestor')return merr('Esta troca não está aguardando o gestor.');
+  if(ac==='aprovar'){const e=conflitoTroca(t,t.id);if(e)return merr('Não é possível aprovar: '+e)}
+  t.status=ac==='aprovar'?'aprovada':'recusada';t.resp=r;t.hist.push([agora(),GESTOR.nome,ac==='aprovar'?'Gestor aprovou':'Gestor recusou']);
+  audit('Troca de escala '+t.status,{status:'aguardando gestor'},{tipo:TIPOS[t.tipo],data:t.data,de:nomeDe(t.cid),para:nomeDe(t.sub),modo:t.modo,dia_do_colega:t.data2||'—',resposta:r});
+  [t.cid,t.sub].forEach(c=>notif(c,`Troca de ${TIPOS[t.tipo].toLowerCase()} em ${fD(t.data)} foi ${t.status} pelo gestor.${r?' '+r:''}`,'agenda'))}
+ if(tp==='ajustes'){const a=S.ajustes.find(x=>x.id===id);if(a.status!=='pendente')return merr('Já decidido.');a.status=ac==='aprovar'?'aprovado':'recusado';a.resp=r;
+  if(ac==='aprovar'){const k=a.cid+'|'+a.data,p=S.ponto[k]||{},antes=p[a.campo]||'';p[a.campo]=a.hora;p.aj=true;S.ponto[k]=p;audit('Ajuste de ponto aplicado',{consultor:nomeDe(a.cid),data:a.data,marcacao:a.campo,horario:antes||'vazio'},{horario:a.hora,resposta:r})}
+  else audit('Ajuste de ponto recusado',{status:'pendente'},{consultor:nomeDe(a.cid),data:a.data,resposta:r});notif(a.cid,`Seu ajuste de ponto de ${fD(a.data)} foi ${a.status}.${r?' '+r:''}`,'ponto')}
+ if(tp==='disp'){const d=S.dispositivos.find(x=>x.id===id);
+  if(ac==='aprovar'){if(d.status!=='pendente')return merr('Já decidido.');aprovarDisp(id,r)}
+  else if(ac==='recusar'){d.status='recusado';d.resp=r;audit('Dispositivo recusado',{status:'pendente'},{consultor:nomeDe(d.cid),dispositivo:d.label,resposta:r});notif(d.cid,'Seu novo dispositivo não foi autorizado. '+r,'perfil')}
+  else{d.status='revogado';d.fim=agora();audit('Dispositivo revogado',{status:'autorizado'},{consultor:nomeDe(d.cid),dispositivo:d.label,motivo:r});notif(d.cid,'Um dispositivo seu foi revogado pelo gestor. '+r,'perfil')}}
+ save();fecharM();toast('Decisão registrada e consultor notificado.');render()}
+
+/* ----- fechamentos da semana ----- */
+VIEWS.g_fech=()=>{const s=addD(segunda(hoje()),GW*7),fim=addD(s,6);let h='';
+ for(let i=0;i<7;i++){const d=addD(s,i),l=ativos().filter(c=>tem(c.id,'fech',d));if(i>=5&&!l.length)continue;
+  h+=`<div class="card" style="${d===hoje()?'border:2px solid var(--or)':''}"><div class="ff" style="color:var(--or);font-weight:700">${DL[dow(d)]}</div><div class="big1">${fD(d).split(', ')[1]}</div>${chip('o','12h às 21h','clock')}
+  <div class="mt">${l.length?l.map(c=>{const tr=S.trocas.some(t=>t.status==='aprovada'&&t.tipo==='fech'&&(t.data===d||t.data2===d)&&(t.sub===c.id||t.cid===c.id)),ex=S.excecoes.some(x=>x.ativo&&x.tipo==='fech'&&x.data===d&&x.cid===c.id);const f=folgaDia(c.id,d);
+   return`<div class="who" style="margin:10px 0;align-items:flex-start">${avatar(c,'sm')}<span style="flex:1">${esc(c.nome)}${tr?'<br>'+chip('b','por troca'):''}${ex?'<br>'+chip('b','exceção'):''}${f?'<br>'+chip(f.status==='aprovada'?'r':'y','folga '+(f.status==='aprovada'?'aprovada':'pendente')):''}</span>${d>=hoje()?`<button class="btn sm" title="Substituir ou retirar" onclick="mExc('${d}','${c.id}')">${ic('swap',14)}</button>`:''}</div>`}).join(''):'<p class="mut">Ninguém escalado</p>'}</div>
+  ${d>=hoje()?`<button class="btn sm" style="width:100%;margin-top:6px" onclick="mExc('${d}','')">${ic('plus',14)} Incluir no dia</button>`:''}</div>`}
+ const hist=[...S.trocas.filter(t=>t.status==='aprovada'&&t.tipo==='fech'&&((t.data>=s&&t.data<=fim)||(t.data2&&t.data2>=s&&t.data2<=fim))).map(t=>({q:t.hist[t.hist.length-1][0],txt:`Troca aprovada: ${nomeDe(t.cid)} → ${nomeDe(t.sub)} em ${fD(t.data)}${t.modo==='troca'?' ⇄ '+fD(t.data2):''}`,mot:t.mot,at:true})),
+  ...S.excecoes.filter(x=>x.tipo==='fech'&&x.data>=s&&x.data<=fim).map(x=>({q:x.q,txt:`Exceção: ${x.acao==='add'?'incluiu':'retirou'} ${nomeDe(x.cid)} em ${fD(x.data)}`,mot:x.motivo,at:x.ativo,id:x.id}))].sort((a,b)=>b.q.localeCompare(a.q));
+ return`<div class="card"><div class="calh" style="margin:0"><button class="btn sm" onclick="GW--;render()">${ic('left',16)}</button><h2 style="min-width:0;text-transform:none">Semana de ${fD(s).split(', ')[1]} a ${fD(fim).split(', ')[1]}</h2><button class="btn sm" onclick="GW++;render()">${ic('right',16)}</button><span class="sp"></span><button class="btn sm" onclick="GW=0;render()">Semana atual</button><button class="btn sm" onclick="go('g_equipe')">${ic('edit',14)} Alterar dia fixo</button></div>
+ <p class="sub" style="margin-top:8px">Todos os fechamentos são das 12h às 21h e substituem o horário habitual no dia. Nada é criado automaticamente: substituições e inclusões são exceções registradas pelo gestor.</p></div><div class="grid g5 mt">${h}</div>
+ <div class="sec"><h2>Histórico da semana</h2></div><div class="card">${hist.length?hist.map(x=>`<div class="li"><div class="lx"><b style="${x.at?'':'text-decoration:line-through;opacity:.6'}">${esc(x.txt)}</b><br><span class="mut">${fDH(x.q)}${x.mot?' · '+esc(x.mot):''}</span></div>${x.id&&x.at?`<button class="btn sm" onclick="desfazExc('${x.id}')">Desfazer</button>`:x.id?chip('n','Desfeita'):''}</div>`).join(''):'<div class="empty">Sem trocas ou exceções nesta semana</div>'}</div>`};
+function mExc(d,cid){const ops=ativos().filter(c=>!tem(c.id,'fech',d));
+ modal(`Fechamento · ${cap(fDL(d))}`,`${cid?`<p class="mt">Consultor escalado: <b>${esc(nomeDe(cid))}</b></p><label>Ação</label><select id="xa" onchange="document.getElementById('xsw').style.display=this.value==='sub'?'':'none'"><option value="sub">Substituir por outro consultor</option><option value="rem">Retirar do fechamento neste dia</option></select>`:'<input type="hidden" id="xa" value="add"><p class="mt">Incluir um consultor no fechamento deste dia (12h–21h).</p>'}
+ <div id="xsw"><label>${cid?'Substituto':'Consultor'} *</label><select id="xs"><option value="">Escolha…</option>${ops.map(c=>`<option value="${c.id}">${esc(c.nome)}</option>`).join('')}</select></div>
+ <label>Motivo *</label><textarea id="xm" rows="2"></textarea>`,
+ `<button class="btn" onclick="fecharM()">Cancelar</button><button class="btn pri" onclick="salvarExc('${d}','${cid}')">Registrar exceção</button>`)}
+function salvarExc(d,cid){const a=val('#xa'),s=val('#xs'),m=val('#xm');if(!m)return merr('Informe o motivo.');if(a!=='rem'&&!s)return merr('Escolha o consultor.');
+ if(a!=='rem'){const e=pessoaConflito(s,'fech',d);if(e)return merr(e)}
+ const novo=[];if(a!=='add')novo.push({cid,acao:'rem'});if(a!=='rem')novo.push({cid:s,acao:'add'});
+ novo.forEach(x=>{S.excecoes.unshift({id:uid(),tipo:'fech',data:d,...x,motivo:m,ativo:true,q:agora(),por:GESTOR.nome});notif(x.cid,`Alteração de escala: você foi ${x.acao==='add'?'incluído(a) no':'retirado(a) do'} fechamento de ${fD(d)} (12h–21h).`,'agenda')});
+ audit('Exceção de fechamento',cid?{escalado:nomeDe(cid),data:d}:null,{acao:a==='sub'?'substituição':a==='add'?'inclusão':'retirada',consultor:s?nomeDe(s):'—',data:d,motivo:m});save();fecharM();toast('Exceção registrada e consultores notificados.');render()}
+function desfazExc(id){const x=S.excecoes.find(e=>e.id===id);if(!x||!x.ativo)return;x.ativo=false;x.desfeito=agora();audit('Exceção de fechamento desfeita',{consultor:nomeDe(x.cid),data:x.data,acao:x.acao},{situacao:'desfeita'});notif(x.cid,`Alteração de escala desfeita em ${fD(x.data)}.`,'agenda');save();render()}
+
+/* ----- escala de sábado ----- */
+VIEWS.g_sab=()=>{const sb=S.sabado;let s0=hoje();while(dow(s0)!==6)s0=addD(s0,1);const sabs=[0,1,2,3].map(i=>addD(s0,i*7));
+ return`<div class="card"><div class="row"><div><h2>Escala de sábado</h2><p class="sub">Defina o horário, a equipe fixa e, se precisar, a equipe de cada sábado. Tudo fica registrado.</p></div><span class="sp"></span>${sb.ativo?chip('g','Ativa','check'):chip('n','Desativada')}</div>
+ <div class="fl mt"><div><label>Entrada</label><input type="time" id="sbi" value="${sb.ini}"></div><div><label>Saída</label><input type="time" id="sbf" value="${sb.fim}"></div><div><label class="chk" style="margin-bottom:10px"><input type="checkbox" id="sba" ${sb.ativo?'checked':''}> Escala de sábado ativa</label></div><div style="flex:0"><button class="btn pri" onclick="salvarSab()">${ic('check',15,3)} Salvar</button></div></div></div>
+ <div class="card mt"><div class="row"><div><h2>Quem atua aos sábados</h2><p class="sub">Equipe fixa de sábado. Para um sábado específico, use "Escolher equipe" no card do dia.</p></div><span class="sp"></span><button class="btn sm" onclick="document.querySelectorAll('.sbc').forEach(x=>x.checked=true)">Marcar todos</button><button class="btn sm" onclick="document.querySelectorAll('.sbc').forEach(x=>x.checked=false)">Desmarcar todos</button></div>
+ <div class="grid g4 mt" style="gap:10px">${ativos().map(c=>`<label class="chk card" style="margin:0;padding:10px 12px;display:flex;gap:10px;align-items:center;cursor:pointer"><input type="checkbox" class="sbc" value="${c.id}" ${c.sab!==false?'checked':''}>${avatar(c,'sm')}<span style="font-weight:600">${esc(c.nome)}</span></label>`).join('')}</div>
+ <div class="row mt"><span class="sp"></span><button class="btn pri" onclick="salvarEqSab()">${ic('check',15,3)} SALVAR EQUIPE DE SÁBADO</button></div></div>
+ <div class="grid g4 mt">${sabs.map(d=>{const l=ativos();return`<div class="card" style="${d===hoje()?'border:2px solid var(--or)':''}"><div class="ff" style="color:var(--or);font-weight:700">Sábado</div><div class="big1">${fD(d).split(', ')[1]}</div>${chip('s',sb.ini.replace(':00','h')+' às '+sb.fim.replace(':00','h'),'clock')} ${chip('n',l.filter(c=>tem(c.id,'sab',d)).length+' escalados')}
+  ${sb.ativo&&d>=hoje()?`<button class="btn sm" style="width:100%;margin-top:10px" onclick="mEscSab('${d}')">${ic('users',14)} Escolher equipe</button>`:''}
+  <div class="mt">${l.map(c=>{const on=tem(c.id,'sab',d),f=folgaDia(c.id,d);return`<div class="who" style="margin:8px 0;${on?'':'opacity:.55'}">${avatar(c,'sm')}<span style="flex:1">${esc(c.nome)}${f?'<br>'+chip(f.status==='aprovada'?'g':'y','folga '+(f.status==='aprovada'?'aprovada':'pendente')):''}${!on?'<br>'+chip('n','dispensado'):''}</span>${sb.ativo&&d>=hoje()?`<button class="btn sm" title="${on?'Dispensar':'Incluir de volta'}" onclick="mSab('${d}','${c.id}',${on})">${ic(on?'x':'plus',14)}</button>`:''}</div>`}).join('')}</div></div>`}).join('')}</div>`};
+function salvarEqSab(){const on=new Set([...document.querySelectorAll('.sbc:checked')].map(x=>x.value)),mud=[];
+ ativos().forEach(c=>{const v=on.has(c.id);if((c.sab!==false)!==v){c.sab=v;mud.push(c);notif(c.id,v?'Alteração de escala: você passou a atuar aos sábados ('+S.sabado.ini+' às '+S.sabado.fim+').':'Alteração de escala: você não está mais na escala fixa de sábado.','agenda')}});
+ if(!mud.length)return toast('Nenhuma alteração.');audit('Equipe fixa de sábado alterada',null,{incluidos:mud.filter(c=>c.sab).map(c=>c.nome),retirados:mud.filter(c=>!c.sab).map(c=>c.nome)});save();toast('Equipe de sábado salva.');render()}
+function mEscSab(d){modal(`Equipe do sábado ${fD(d).split(', ')[1]}`,`<p class="sub mt">Marque quem atua neste sábado (${S.sabado.ini} às ${S.sabado.fim}). Vale só para esta data.</p>
+ <div class="mt">${ativos().map(c=>`<label class="chk" style="display:flex;gap:10px;align-items:center;margin:8px 0"><input type="checkbox" class="esc" value="${c.id}" ${tem(c.id,'sab',d)?'checked':''}>${avatar(c,'sm')}<b>${esc(c.nome)}</b>${folgaDia(c.id,d)?chip('y','folga'):''}</label>`).join('')}</div>
+ <label>Motivo (opcional)</label><input id="escm">`,`<button class="btn" onclick="fecharM()">Cancelar</button><button class="btn pri" onclick="salvarEscSab('${d}')">${ic('check',15,3)} Salvar</button>`)}
+function salvarEscSab(d){const on=new Set([...document.querySelectorAll('.esc:checked')].map(x=>x.value)),m=val('#escm'),mud=[];
+ ativos().forEach(c=>{const v=on.has(c.id);if(tem(c.id,'sab',d)===v)return;S.excecoes.filter(x=>x.ativo&&x.tipo==='sab'&&x.data===d&&x.cid===c.id).forEach(x=>{x.ativo=false;x.desfeito=agora()});
+  if(tem(c.id,'sab',d)!==v)S.excecoes.unshift({id:uid(),tipo:'sab',data:d,cid:c.id,acao:v?'add':'rem',motivo:m||'Escolha da equipe do sábado',ativo:true,q:agora(),por:GESTOR.nome});
+  mud.push([c,v]);notif(c.id,`Alteração de escala: você ${v?'vai atuar':'não vai atuar'} no sábado ${fD(d)}.`,'agenda')});
+ if(!mud.length){fecharM();return toast('Nenhuma alteração.')}
+ audit('Equipe do sábado definida',null,{data:d,incluidos:mud.filter(x=>x[1]).map(x=>x[0].nome),retirados:mud.filter(x=>!x[1]).map(x=>x[0].nome),motivo:m});save();fecharM();toast('Equipe do sábado salva.');render()}
+function salvarSab(){const i=val('#sbi'),f=val('#sbf'),a=$('#sba').checked;if(!i||!f||t2m(f)<=t2m(i))return toast('Horário inválido.','er');const antes={...S.sabado};S.sabado={ativo:a,ini:i,fim:f};
+ audit('Escala de sábado alterada',{ativa:antes.ativo?'sim':'não',horario:antes.ini+'–'+antes.fim},{ativa:a?'sim':'não',horario:i+'–'+f});ativos().forEach(c=>notif(c.id,`Alteração de escala: sábado ${a?i+' às '+f:'desativado'}.`,'agenda'));save();toast('Escala de sábado salva.');render()}
+function mSab(d,cid,on){modal(`${on?'Dispensar':'Incluir'} ${esc(nomeDe(cid))} · ${cap(fDL(d))}`,`<label>Motivo *</label><textarea id="sm" rows="2"></textarea>`,`<button class="btn" onclick="fecharM()">Cancelar</button><button class="btn pri" onclick="salvarSabX('${d}','${cid}',${on})">Confirmar</button>`)}
+function salvarSabX(d,cid,on){const m=val('#sm');if(!m)return merr('Informe o motivo.');S.excecoes.unshift({id:uid(),tipo:'sab',data:d,cid,acao:on?'rem':'add',motivo:m,ativo:true,q:agora(),por:GESTOR.nome});
+ audit('Exceção na escala de sábado',{consultor:nomeDe(cid),data:d,situacao:on?'escalado':'dispensado'},{situacao:on?'dispensado':'escalado',motivo:m});notif(cid,`Alteração de escala: você foi ${on?'dispensado(a) do':'incluído(a) no'} sábado ${fD(d)}.`,'agenda');save();fecharM();toast('Registrado.');render()}
+
+/* ----- agenda externa ----- */
+VIEWS.g_ext=()=>{const s=addD(segunda(hoje()),GW*7),rows=[];
+ for(let i=0;i<7;i++){const d=addD(s,i);ativos().forEach(c=>{const ex=S.externas.filter(e=>e.cid===c.id&&e.data===d);if(ex.length)ex.forEach(e=>rows.push([c,d,e]));else if(tem(c.id,'ext',d))rows.push([c,d,null])})}
+ const pend=ativos().filter(c=>c.ext==='pend');
+ return`<div class="card"><div class="calh" style="margin:0"><button class="btn sm" onclick="GW--;render()">${ic('left',16)}</button><h2 style="min-width:0;text-transform:none">Semana de ${fD(s).split(', ')[1]} a ${fD(addD(s,6)).split(', ')[1]}</h2><button class="btn sm" onclick="GW++;render()">${ic('right',16)}</button><span class="sp"></span><button class="btn pri sm" onclick="mExt('','${hoje()}')">${ic('plus',15)} Nova agenda externa</button></div>
+ ${pend.length?`<div class="msg wa">${ic('alert',16)}<span>Agenda externa não informada: ${pend.map(c=>esc(c.nome)).join(', ')}.</span></div>`:''}</div>
+ <div class="card mt" style="padding:6px"><div class="tw"><table class="tb"><thead><tr><th>Consultor</th><th>Data</th><th>Horário</th><th>Local</th><th>Objetivo</th><th>Observações</th><th>Situação</th><th></th></tr></thead><tbody>
+ ${rows.map(([c,d,e])=>`<tr><td><div class="who">${avatar(c,'sm')}${esc(c.nome)}</div></td><td>${fD(d)}</td>${e?`<td>${esc(e.hora)}</td><td>${esc(e.local)}</td><td>${esc(e.obj)}</td><td>${esc(e.obs||'—')}</td><td>${chip(e.sit==='Realizada'?'g':e.sit==='Cancelada'?'r':'y',e.sit)}</td><td><button class="btn sm" onclick="mExt('${c.id}','${d}','${e.id}')">${ic('edit',14)}</button></td>`:`<td colspan="4" class="mut">Previsto na escala${c.extObs?' ('+esc(c.extObs)+')':''} — sem detalhes</td><td>${chip('n','A detalhar')}</td><td><button class="btn sm" onclick="mExt('${c.id}','${d}')">${ic('plus',14)}</button></td>`}</tr>`).join('')||'<tr><td colspan="8" class="empty">Nenhuma agenda externa nesta semana</td></tr>'}</tbody></table></div></div>`};
+
+/* ----- calendário da equipe ----- */
+VIEWS.g_cal=()=>{GCID=GCID||ativos()[0].id;return`<div class="card"><div class="fl" style="margin-bottom:14px"><div><label>Consultor</label><select onchange="GCID=this.value;render()">${ativos().map(c=>`<option value="${c.id}" ${GCID===c.id?'selected':''}>${esc(c.nome)}</option>`).join('')}</select></div></div>${calHTML(GCID)}</div><div class="sec">${avatar(cons(GCID),'sm')}<h2>Semana de ${esc(nomeDe(GCID))}</h2></div>${semanaHTML(GCID)}`};
+
+/* ----- equipe e escalas ----- */
+const dSel=(id,v)=>`<select id="${id}"><option value="">Nenhum</option><option value="pend" ${v==='pend'?'selected':''}>Pendente de confirmação</option>${[1,2,3,4,5,6].map(d=>`<option value="${d}" ${v===d?'selected':''}>${DL[d]}</option>`).join('')}</select>`;
+VIEWS.g_equipe=()=>`<div class="card"><div class="row"><div><h2>Equipe e escalas</h2><p class="sub">Tudo editável. Cada alteração fica na auditoria (antes e depois).</p></div><span class="sp"></span><button class="btn pri" onclick="mCons()">${ic('plus',16)} Novo consultor</button></div>
+ <label>Dias de trabalho do horário habitual</label><div>${[1,2,3,4,5,6,0].map(d=>`<label class="chk"><input type="checkbox" ${S.diasUteis.includes(d)?'checked':''} onchange="diaUtil(${d},this.checked)"> ${DN[d]}</label>`).join('')}</div></div>
+ <div class="card mt" style="padding:6px"><div class="tw"><table class="tb"><thead><tr><th>Consultor</th><th>Fechamento</th><th>Atendimento</th><th>Agenda externa</th><th>Horário habitual</th><th>Dispositivo</th><th>Situação</th><th></th></tr></thead><tbody>
+ ${S.equipe.map(c=>{const d=S.dispositivos.find(x=>x.cid===c.id&&x.status==='autorizado'),pd=S.dispositivos.some(x=>x.cid===c.id&&x.status==='pendente');const v=x=>x==='pend'?chip('y','Pendente'):x==null?'<span class="mut">—</span>':DN[x];
+ return`<tr style="${c.ativo?'':'opacity:.5'}"><td><div class="who">${avatar(c,'sm')}<span>${esc(c.nome)}${c.apelido?` <span class="mut">(${esc(c.apelido)})</span>`:''}<br><span class="mut" style="font-weight:400">${esc(c.email||'e-mail a cadastrar')}</span></span></div></td><td>${v(c.fech)}${c.fech!=null&&c.fech!=='pend'?' <span class="mut">12–21h</span>':''}</td><td>${v(c.atend)}</td><td>${c.ext==='pend'?chip('y','Não informado'):extTxt(c)}${c.extObs&&c.ext!=='pend'?`<br><span class="mut">${esc(c.extObs)}</span>`:''}${c.obs?`<br><span class="mut">Obs.: ${esc(c.obs)}</span>`:''}</td><td>${c.ini==='pend'?chip('y','Pendente'):c.ini+' – '+c.fim}</td><td>${d?chip('g',d.label):pd?chip('y','Aguardando'):chip('n','Nenhum')}</td><td>${c.ativo?chip('g','Ativo'):chip('n','Inativo')}</td><td><button class="btn sm" onclick="mCons('${c.id}')">${ic('edit',14)} Editar</button></td></tr>`}).join('')}</tbody></table></div></div>`;
+function diaUtil(d,on){const a=[...S.diasUteis];S.diasUteis=on?[...new Set([...a,d])]:a.filter(x=>x!==d);audit('Dias de trabalho alterados',{dias:a.map(x=>DN[x])},{dias:S.diasUteis.map(x=>DN[x])});save();render()}
+function mCons(id){const c=id?cons(id):{nome:'',email:'',fech:null,atend:null,ext:[],extObs:'',ini:'09:00',fim:'18:00',ativo:true};const ep=c.ext==='pend',hp=c.ini==='pend';
+ modal(id?'Editar '+esc(c.nome):'Novo consultor',`${id?`<div class="row mt">${avatar(c,'sm')}<span class="mut">${c.foto?'Foto enviada pelo consultor':'Sem foto — iniciais'}</span>${c.foto?`<button class="btn sm" onclick="fotoRemG('${id}')">Remover foto</button>`:''}</div>`:''}<div class="fl mt"><div><label>Nome *</label><input id="cn" value="${esc(c.nome)}"></div><div><label>E-mail corporativo</label><input id="ce" type="email" value="${esc(c.email||'')}"></div></div>
+ <div class="fl"><div><label>Nome completo</label><input id="cnc" value="${esc(c.nomeCompleto||'')}" placeholder="Exibido no início do consultor"></div><div><label>Como é chamado (saudação)</label><input id="cap" value="${esc(c.apelido||'')}" placeholder="Ex.: Mateo"></div></div>
+ <div class="fl"><div><label>Fechamento (12h–21h)</label>${dSel('cf',c.fech)}</div><div><label>Atendimento</label>${dSel('ca',c.atend)}</div></div>
+ <label>Agenda externa</label><div>${[1,2,3,4,5,6].map(d=>`<label class="chk"><input type="checkbox" class="cx" value="${d}" ${!ep&&Array.isArray(c.ext)&&c.ext.includes(d)?'checked':''}> ${DN[d]}</label>`).join('')}<label class="chk"><input type="checkbox" id="cxp" ${ep?'checked':''}> Não informado / pendente</label></div>
+ <label>Observação da agenda externa</label><input id="co" value="${esc(c.extObs||'')}" placeholder="Ex.: variável">
+ <label>Exceções e observações</label><input id="cob" value="${esc(c.obs||'')}">
+ <div class="fl"><div><label>Entrada habitual</label><input type="time" id="ci" value="${hp?'':c.ini}"></div><div><label>Saída habitual</label><input type="time" id="cs" value="${hp?'':c.fim}"></div></div>
+ <label class="chk"><input type="checkbox" id="chp" ${hp?'checked':''}> Horário pendente de confirmação</label>
+ ${id?`<label class="chk"><input type="checkbox" id="cat" ${c.ativo?'checked':''}> Ativo</label><div class="row mt">${S.dispositivos.some(x=>x.cid===id&&x.status==='autorizado')?`<button class="btn sm" onclick="revogarDe('${id}')">${ic('shield',14)} Revogar dispositivo atual</button>`:''}</div>`:''}
+ <p class="mut mt">Inativar mantém todo o histórico. Nada é excluído.</p>`,
+ `<button class="btn" onclick="fecharM()">Cancelar</button><button class="btn pri" onclick="salvarCons('${id||''}')">Salvar</button>`)}
+function salvarCons(id){const nv=v=>v===''?null:v==='pend'?'pend':Number(v);const hp=$('#chp').checked;
+ const o={nome:val('#cn'),nomeCompleto:val('#cnc'),apelido:val('#cap'),email:val('#ce'),fech:nv(val('#cf')),atend:nv(val('#ca')),ext:$('#cxp').checked?'pend':[...document.querySelectorAll('.cx:checked')].map(x=>Number(x.value)),extObs:val('#co'),obs:val('#cob'),ini:hp?'pend':val('#ci'),fim:hp?'pend':val('#cs'),ativo:id?$('#cat').checked:true};
+ if(!o.nome)return merr('Informe o nome.');if(!hp&&(!o.ini||!o.fim))return merr('Informe entrada e saída ou marque como pendente.');if(!hp&&t2m(o.fim)<=t2m(o.ini))return merr('A saída deve ser depois da entrada.');
+ if(S.equipe.some(c=>c.id!==id&&norm(c.nome)===norm(o.nome)))return merr('Já existe um consultor com este nome.');
+ if(o.email&&S.equipe.some(c=>c.id!==id&&c.email&&norm(c.email)===norm(o.email)))return merr('E-mail já usado por outro consultor.');
+ if(Array.isArray(o.ext)&&o.fech!=null&&o.fech!=='pend'&&o.ext.includes(o.fech))return merr('Agenda externa no mesmo dia do fechamento gera conflito (12h–21h).');
+ const ftx=c=>({fechamento:dTxt(c.fech),atendimento:dTxt(c.atend),agenda_externa:extTxt(c),horario:c.ini==='pend'?'pendente':c.ini+'–'+c.fim,email:c.email||'—',ativo:c.ativo?'sim':'não'});
+ if(id){const c=cons(id),a=ftx(c);Object.assign(c,o);const n=ftx(c);audit('Cadastro/escala alterado: '+c.nome,a,n);if(JSON.stringify([a.fechamento,a.atendimento,a.agenda_externa,a.horario])!==JSON.stringify([n.fechamento,n.atendimento,n.agenda_externa,n.horario]))notif(c.id,'Alteração de escala: sua escala fixa foi atualizada pelo gestor.','perfil')}else{const c={id:'c'+uid(),foto:null,...o};S.equipe.push(c);audit('Consultor cadastrado: '+c.nome,null,ftx(c))}
+ save();fecharM();toast('Cadastro salvo.');render()}
+function fotoRemG(cid){const c=cons(cid);c.foto=null;c.fotoSrc=null;c.fotoAj=null;audit('Foto de perfil removida pelo gestor',{foto:'havia foto'},{consultor:c.nome});notif(cid,'O gestor removeu sua foto de perfil. Você pode enviar outra em Meu perfil.','perfil');save();fecharM();render()}
+function revogarDe(cid){const d=S.dispositivos.find(x=>x.cid===cid&&x.status==='autorizado');if(!d)return;fecharM();TAB='disp';decidir('disp',d.id,'revogar')}
+
+/* ----- alinhamentos ----- */
+const CATS=['Horários','Fechamentos','Agendas externas','Atendimento','Regras operacionais','Alterações de escala','Orientações semanais'];
+VIEWS.g_alinh=()=>`<div class="card"><h2>Novo alinhamento</h2><div class="fl mt"><div><label>Assunto</label><select id="acat">${CATS.map(c=>`<option>${c}</option>`).join('')}</select></div><div style="flex:2"><label>Título *</label><input id="at"></div></div><label>Mensagem *</label><textarea id="ax" rows="4"></textarea><div class="row mt"><span class="sp"></span><button class="btn pri" onclick="pubAl()">${ic('msg',16)} PUBLICAR PARA A EQUIPE</button></div></div>
+ <div class="sec"><h2>Publicados</h2></div><div class="card">${S.alinh.length?S.alinh.map(a=>{const at=ativos(),ok=at.filter(c=>a.leit[c.id]);return`<div class="li"><div class="lx"><h3>${esc(a.tit)}</h3><p class="mut">${a.cat?esc(a.cat)+' · ':''}Publicado em ${fDH(a.q)}</p><p style="margin-top:6px;white-space:pre-wrap">${esc(a.txt)}</p>
+ <div class="row mt">${at.map(c=>a.leit[c.id]?chip('g',c.nome,'check'):chip('n',c.nome)).join('')}</div></div><div>${chip(ok.length===at.length?'g':'y',ok.length+' de '+at.length+' confirmaram')}</div></div>`}).join(''):'<div class="empty">Nenhum alinhamento publicado</div>'}</div>`;
+function pubAl(){const t=val('#at'),x=val('#ax');if(!t||!x)return toast('Preencha título e mensagem.','er');S.alinh.unshift({id:uid(),cat:val('#acat'),tit:t,txt:x,q:agora(),leit:{}});audit('Alinhamento publicado',null,{titulo:t});ativos().forEach(c=>notif(c.id,'Novo alinhamento: '+t,'alinh'));save();toast('Alinhamento publicado e equipe notificada.');render()}
+
+/* ----- importar escala ----- */
+const COLS={consultor:['consultor','nome','nome do consultor'],fech:['fechamento','dia de fechamento','dia do fechamento'],atend:['atendimento','dia de atendimento','dia do atendimento'],ext:['agenda externa','externa','agenda','dia de agenda externa','dia da agenda externa'],ini:['entrada','inicio','horario inicio','horario habitual de entrada','horario de entrada','entrada habitual'],fim:['saida','fim','horario fim','horario habitual de saida','horario de saida','saida habitual'],email:['email','e-mail'],obs:['observacoes','observacao','obs','excecoes','excecoes e observacoes','excecoes/observacoes']};
+function pDia(v){const s=norm(v);if(v==null||s==='')return undefined;if(/pend|confirm/.test(s))return'pend';if(/^(-|nenhum|nenhuma|nao|sem|n\/a)/.test(s))return null;const m={dom:0,seg:1,ter:2,qua:3,qui:4,sex:5,sab:6};const k=s.slice(0,3);return k in m?m[k]:'?'}
+function pExt(v){const s=norm(v);if(v==null||s==='')return undefined;if(/pend|nao informado|confirm/.test(s))return'pend';if(/^(-|nenhum|nenhuma|sem)/.test(s))return[];const r=[];s.split(/\s*(?:\/|,|;|\+|\be\b|-|–)\s*/).forEach(t=>{const d=pDia(t.replace(/\(.*\)/,''));if(typeof d==='number'&&!r.includes(d))r.push(d)});return r.length?r:'?'}
+function pHora(v){if(v==null||String(v).trim()==='')return undefined;if(typeof v==='number'&&v<1){const m=Math.round(v*1440);return pad(Math.floor(m/60))+':'+pad(m%60)}const s=norm(v);if(/pend/.test(s))return'pend';const m=s.match(/(\d{1,2})\s*(?:[:h]\s*(\d{2}))?/);return m?pad(+m[1])+':'+(m[2]||'00'):'?'}
+function csvRows(t){const sep=(t.split('\n')[0].match(/;/g)||[]).length>=(t.split('\n')[0].match(/,/g)||[]).length?';':',';const out=[];let row=[],cur='',q=false;
+ for(let i=0;i<t.length;i++){const ch=t[i];if(q){if(ch==='"'){if(t[i+1]==='"'){cur+='"';i++}else q=false}else cur+=ch}else if(ch==='"')q=true;else if(ch===sep){row.push(cur);cur=''}else if(ch==='\n'){row.push(cur);out.push(row);row=[];cur=''}else if(ch!=='\r')cur+=ch}
+ if(cur||row.length){row.push(cur);out.push(row)}return out.filter(r=>r.some(x=>String(x).trim()))}
+function lerXlsx(buf){return new Promise((ok,er)=>{const go2=()=>{try{const wb=XLSX.read(buf,{type:'array'});ok(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,raw:true,defval:''}))}catch(e){er(e)}};
+ if(window.XLSX)return go2();const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';s.onload=go2;s.onerror=()=>er(new Error('Não foi possível carregar o leitor de Excel. Salve a planilha como CSV.'));document.head.appendChild(s)})}
+async function impArq(inp){const f=inp.files[0];if(!f)return;try{let rows;if(/\.csv$|\.txt$/i.test(f.name))rows=csvRows(await f.text());else rows=await lerXlsx(await f.arrayBuffer());prepImp(rows,f.name)}catch(e){toast(e.message||'Arquivo inválido.','er')}inp.value=''}
+function prepImp(rows,nome){if(!rows.length)return toast('Arquivo vazio.','er');const hd=rows[0].map(norm),ix={};
+ for(const[k,al]of Object.entries(COLS)){const i=hd.findIndex(h=>al.includes(h));if(i>=0)ix[k]=i}
+ if(ix.consultor==null)return toast('Coluna "Consultor" não encontrada no cabeçalho.','er');
+ const vistos=new Set(),it=[];
+ rows.slice(1).forEach((r,n)=>{const nm=String(r[ix.consultor]||'').trim();if(!nm)return;const key=norm(nm);
+  const e={lin:n+2,nome:nm,erros:[],mud:{}};if(vistos.has(key)){e.st='dup';it.push(e);return}vistos.add(key);
+  const c=S.equipe.find(x=>norm(x.nome)===key||norm(x.apelido)===key||norm(x.alias)===key||norm(x.nome).split(' ')[0]===key.split(' ')[0]);e.c=c;
+  const nv={};if(ix.fech!=null)nv.fech=pDia(r[ix.fech]);if(ix.atend!=null)nv.atend=pDia(r[ix.atend]);if(ix.ext!=null)nv.ext=pExt(r[ix.ext]);if(ix.ini!=null)nv.ini=pHora(r[ix.ini]);if(ix.fim!=null)nv.fim=pHora(r[ix.fim]);if(ix.email!=null&&String(r[ix.email]).trim())nv.email=String(r[ix.email]).trim();if(ix.obs!=null&&String(r[ix.obs]).trim())nv.obs=String(r[ix.obs]).trim();
+  for(const[k,v]of Object.entries(nv)){if(v===undefined)continue;if(v==='?'||(Array.isArray(v)&&v.includes('?'))){e.erros.push(k);continue}
+   if(!c||JSON.stringify(c[k])!==JSON.stringify(v))e.mud[k]=v}
+  e.st=e.erros.length?'erro':!c?'novo':Object.keys(e.mud).length?'alt':'igual';it.push(e)});
+ IMP={nome,it};render()}
+const fmtV=(k,v)=>k==='ext'?(v==='pend'?'Não informado':v.length?v.map(d=>DN[d]).join('/'):'Nenhuma'):['fech','atend'].includes(k)?(v==='pend'?'Pendente':v==null?'Nenhum':DN[v]):v==='pend'?'Pendente':v;
+VIEWS.g_import=()=>{const lab={fech:'Fechamento',atend:'Atendimento',ext:'Agenda externa',ini:'Entrada',fim:'Saída',email:'E-mail',obs:'Observações'};
+ const st={novo:chip('b','Novo consultor'),alt:chip('o','Alteração'),igual:chip('n','Sem mudanças'),dup:chip('y','Duplicado — ignorado'),erro:chip('r','Valor não reconhecido')};
+ return`<div class="card"><h2>Importar escala</h2><p class="sub">Excel (.xlsx) ou CSV. Primeira linha com os títulos: <b>Consultor · E-mail · Fechamento · Atendimento · Agenda externa · Entrada · Saída · Observações</b>.</p>
+ <div class="msg in">${ic('alert',16)}<span>Células vazias mantêm o valor atual. Use "Nenhum" para tirar, "Pendente" para marcar como a confirmar. Linhas repetidas são ignoradas. A importação só altera o cadastro — histórico, ponto e solicitações nunca são apagados.</span></div>
+ <div class="row mt"><label class="btn pri" style="margin:0;color:#fff">${ic('up',16)} Escolher arquivo<input type="file" accept=".xlsx,.xls,.csv,.txt" style="display:none" onchange="impArq(this)"></label>${IMP?`<span class="sub">${esc(IMP.nome)}</span>`:''}</div></div>
+ ${IMP?`<div class="sec"><h2>Pré-visualização</h2><span class="sp"></span><button class="btn" onclick="IMP=null;render()">Descartar</button><button class="btn ok" ${IMP.it.some(e=>['novo','alt'].includes(e.st))?'':'disabled'} onclick="confImp()">${ic('check',16,3)} CONFIRMAR IMPORTAÇÃO</button></div>
+ <div class="card" style="padding:6px"><div class="tw"><table class="tb"><thead><tr><th>Linha</th><th>Consultor</th><th>Situação</th><th>O que muda</th></tr></thead><tbody>${IMP.it.map(e=>`<tr><td>${e.lin}</td><td><b>${esc(e.nome)}</b>${e.c&&norm(e.c.nome)!==norm(e.nome)?` <span class="mut">→ ${esc(e.c.nome)}</span>`:''}</td><td>${st[e.st]}</td><td>${e.st==='erro'?'Verifique: '+e.erros.map(k=>lab[k]).join(', '):Object.entries(e.mud).map(([k,v])=>`${lab[k]}: ${e.c?`<s class="mut">${esc(fmtV(k,e.c[k]))}</s> → `:''}<b>${esc(fmtV(k,v))}</b>`).join('<br>')||'—'}</td></tr>`).join('')}</tbody></table></div></div>`:''}`};
+function confImp(){if(!IMP)return;let n=0,a=0;IMP.it.forEach(e=>{if(e.st==='alt'){const antes={};Object.keys(e.mud).forEach(k=>antes[k]=fmtV(k,e.c[k]));if('ext' in e.mud&&e.c.ext==='pend'&&/pendente|não informado/i.test(e.c.extObs||''))e.c.extObs='';Object.assign(e.c,e.mud);if(['fech','atend','ext','ini','fim'].some(k=>k in e.mud))notif(e.c.id,'Alteração de escala: sua escala foi atualizada por importação.','perfil');audit('Importação de escala: '+e.c.nome,antes,Object.fromEntries(Object.entries(e.mud).map(([k,v])=>[k,fmtV(k,v)])));a++}
+ if(e.st==='novo'){const c={id:'c'+uid(),nome:e.nome,email:'',obs:'',foto:null,ativo:true,fech:null,atend:null,ext:[],extObs:'',ini:'pend',fim:'pend',...e.mud};S.equipe.push(c);audit('Importação de escala: novo consultor '+c.nome,null,Object.fromEntries(Object.entries(e.mud).map(([k,v])=>[k,fmtV(k,v)])));n++}});
+ save();IMP=null;toast(`Importação concluída: ${a} alterado(s), ${n} novo(s).`);render()}
+
+/* ----- auditoria ----- */
+VIEWS.g_audit=()=>{const q=norm(AQ),l=S.audit.filter(a=>!q||norm(a.u+' '+a.op+' '+a.antes+' '+a.depois).includes(q)).slice(0,300);
+ return`<div class="card"><div class="row"><div><h2>Auditoria</h2><p class="sub">Usuário, data, horário, operação e valores antes/depois. Registros não podem ser apagados.</p></div><span class="sp"></span><input style="max-width:280px" placeholder="Buscar…" value="${esc(AQ)}" oninput="AQ=this.value;clearTimeout(window._aq);window._aq=setTimeout(()=>{render();const i=document.querySelector('#main input');i.focus();i.setSelectionRange(i.value.length,i.value.length)},300)"></div></div>
+ <div class="card mt" style="padding:6px"><div class="tw"><table class="tb"><thead><tr><th>Data e hora</th><th>Usuário</th><th>Operação</th><th>Antes</th><th>Depois</th></tr></thead><tbody>${l.map(a=>`<tr><td style="white-space:nowrap">${fDH(a.q)}</td><td>${esc(a.u)}</td><td><b>${esc(a.op)}</b></td><td class="mut">${esc(a.antes||'—')}</td><td>${esc(a.depois||'—')}</td></tr>`).join('')}</tbody></table></div></div>`};
+
+/* ----- demonstração ----- */
+VIEWS.g_demo=()=>`<div class="card"><h2>Dados de demonstração</h2><p class="sub">Para validar telas e fluxos sem dados reais de jornada.</p>
+ <div class="grid g3 mt"><button class="big" onclick="demoPonto()"><span class="bi">${ic('clock',24)}</span>GERAR PONTO FICTÍCIO (ÚLTIMOS 7 DIAS)</button><button class="big gt" onclick="limparDemo()"><span class="bi">${ic('x',24)}</span>REMOVER PONTO FICTÍCIO</button><button class="big" style="background:linear-gradient(180deg,#E5524A,var(--er));box-shadow:0 7px 0 var(--er2)" onclick="resetTudo()"><span class="bi">${ic('alert',24)}</span>RESTAURAR ESTADO INICIAL</button></div>
+ <div class="msg in mt">${ic('alert',16)}<span>O ponto fictício é marcado como demonstração e pode ser removido a qualquer momento. "Restaurar" volta tudo ao cadastro inicial neste navegador.</span></div></div>`;
+function demoPonto(){const h=hoje(),s=segunda(h),var_=[0,-3,2,8,4,-1,14,1,-6,3,0,22];let n=0,i=0;
+ for(let k=7;k>=1;k--){const d=addD(h,-k);ativos().forEach(c=>{const p=plano(c.id,d),key=c.id+'|'+d;if(!p||p.pend||p.folga||S.ponto[key])return;
+  const v1=var_[(i++)%var_.length],v2=var_[(i*7)%var_.length]*(i%3?1:-1),mm=x=>pad(Math.floor(x/60))+':'+pad(x%60);
+  const r={ent:mm(t2m(p.ini)+v1),ii:mm(t2m(p.ini)+(p.fech?240:180)),if:mm(t2m(p.ini)+(p.fech?300:240)),demo:true};if(i%13!==5)r.sai=mm(t2m(p.fim)+v2);S.ponto[key]=r;n++})}
+ audit('Ponto fictício gerado (demonstração)',null,{registros:n});save();toast(n+' registros fictícios gerados.');render()}
+function limparDemo(){let n=0;for(const k of Object.keys(S.ponto))if(S.ponto[k].demo){delete S.ponto[k];n++}audit('Ponto fictício removido (demonstração)',null,{registros:n});save();toast(n+' registros fictícios removidos.');render()}
+function resetTudo(){modal('Restaurar estado inicial',`<p class="mt">Isso apaga, <b>somente neste navegador</b>, todos os dados de teste (ponto, solicitações, notificações, auditoria) e volta ao cadastro inicial da equipe.</p>`,`<button class="btn" onclick="fecharM()">Cancelar</button><button class="btn er" onclick="S=seed();save();fecharM();toast('Estado inicial restaurado.');go('g_inicio')">Restaurar</button>`)}
+
+/* ===== início ===== */
+(function(){let u=null;try{u=JSON.parse(sessionStorage.getItem('marteGE_u')||'null')}catch(e){}
+ if(u&&(u.tipo==='gestor'||(cons(u.id)&&S.dispositivos.some(d=>d.cid===u.id&&d.dev===DEV&&d.status==='autorizado')))){U=u;iniciarApp()}else renderLogin()})();
+
+</script>
+</body></html>
